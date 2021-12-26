@@ -1,5 +1,8 @@
-package controller;
+package service.impl;
+
+import controller.request.dvd.SearchDvdRequest;
 import models.Dvd;
+import service.DvdService;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -7,15 +10,16 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DvdModify {
-    //Lay du lieu tu db
-    public static List<Dvd> findALl() throws SQLException {
+public class DvdServiceImpl implements DvdService {
+
+    @Override
+    public List<Dvd> findAll() {
         List<Dvd> dvdList = new ArrayList<>();
 
         Connection connection = null;
         Statement statement = null;
         try {
-            //Lay tat ca sach
+            //Lay tat ca dia
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bookmanager_db", "root", "");
 
             //Query
@@ -34,20 +38,20 @@ public class DvdModify {
             }
 
         } catch(SQLException ex) {
-            Logger.getLogger(DvdModify.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DvdServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             if(statement != null) {
                 try{
                     statement.close();
                 } catch (SQLException ex) {
-                    Logger.getLogger(DvdModify.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DvdServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             if(connection != null) {
                 try {
                     connection.close();
                 } catch (SQLException ex) {
-                    Logger.getLogger(DvdModify.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DvdServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
 
                 }
             }
@@ -55,11 +59,12 @@ public class DvdModify {
         return dvdList;
     }
 
-    public static void insert(Dvd dvd) {
+    @Override
+    public void insertDvd(Dvd dvd) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            //Lay tat ca sach
+            //Lay tat ca dia
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bookmanager_db", "root", "");
 
             //Query
@@ -77,31 +82,32 @@ public class DvdModify {
             statement.setInt(8, dvd.getDuration());
 
         } catch(SQLException ex) {
-            Logger.getLogger(DvdModify.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DvdServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             if(statement != null) {
                 try{
                     statement.close();
                 } catch (SQLException ex) {
-                    Logger.getLogger(DvdModify.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DvdServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             if(connection != null) {
                 try {
                     connection.close();
                 } catch (SQLException ex) {
-                    Logger.getLogger(DvdModify.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DvdServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
 
                 }
             }
         }
     }
 
-    public static void update(Dvd dvd) {
+    @Override
+    public void updateDvd(Dvd dvd) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            //Lay tat ca sach
+            //Lay tat ca dia
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bookmanager_db", "root", "");
 
             //Query
@@ -121,31 +127,32 @@ public class DvdModify {
 
 
         } catch(SQLException ex) {
-            Logger.getLogger(DvdModify.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DvdServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             if(statement != null) {
                 try{
                     statement.close();
                 } catch (SQLException ex) {
-                    Logger.getLogger(DvdModify.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DvdServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             if(connection != null) {
                 try {
                     connection.close();
                 } catch (SQLException ex) {
-                    Logger.getLogger(DvdModify.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DvdServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
 
                 }
             }
         }
     }
 
-    public static void delete(int id) {
+    @Override
+    public void deleteDvd(Integer id) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            //Lay tat ca sach
+            //Lay tat ca dia
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bookmanager_db", "root", "");
 
             //Query
@@ -157,23 +164,74 @@ public class DvdModify {
 
 
         } catch(SQLException ex) {
-            Logger.getLogger(DvdModify.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DvdServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             if(statement != null) {
                 try{
                     statement.close();
                 } catch (SQLException ex) {
-                    Logger.getLogger(DvdModify.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DvdServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             if(connection != null) {
                 try {
                     connection.close();
                 } catch (SQLException ex) {
-                    Logger.getLogger(DvdModify.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DvdServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
 
                 }
             }
         }
+    }
+
+    @Override
+    public List<Dvd> searchDvd(SearchDvdRequest searchDvdRequest) {
+        List<Dvd> dvdList = new ArrayList<>();
+
+        Connection connection = null;
+        Statement statement = null;
+        try {
+            //Lay tat ca dia
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bookmanager_db", "root", "");
+
+            String title = searchDvdRequest.getTitle();
+            String author = searchDvdRequest.getAuthor();
+            Integer publicYear = searchDvdRequest.getPublicYear();
+
+            //Query
+            String sql = "select * from book where title=" + title + "or" +"author=" + author + "or" + "publicYear=" + publicYear;
+            statement = connection.createStatement();
+
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+                Dvd dvd = new Dvd(resultSet.getInt("id"), resultSet.getString("title"),
+                        resultSet.getString("author"), resultSet.getInt("publicYear"),
+                        resultSet.getString("publisher"), resultSet.getInt("importPrice"),
+                        resultSet.getInt("exportPrice"), resultSet.getBoolean("status"),
+                        resultSet.getInt("size"),resultSet.getInt("duration"));
+                dvdList.add(dvd);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(BookServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(BookServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(BookServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+
+                }
+            }
+        }
+        return dvdList;
     }
 }

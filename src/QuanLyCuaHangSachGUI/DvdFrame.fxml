@@ -13,25 +13,25 @@
       <Pane layoutX="203.0" layoutY="14.0" prefHeight="171.0" prefWidth="635.0">
          <children>
             <Label layoutX="7.0" layoutY="10.0" prefHeight="25.0" prefWidth="30.0" text="Title" />
-            <TextField layoutX="62.0" layoutY="10.0" prefHeight="25.0" prefWidth="125.0" />
-            <TextField layoutX="64.0" layoutY="43.0" prefHeight="25.0" prefWidth="125.0" />
-            <TextField layoutX="64.0" layoutY="78.0" prefHeight="25.0" prefWidth="125.0" />
+            <TextField fx:id="txtTitle" layoutX="62.0" layoutY="10.0" prefHeight="25.0" prefWidth="125.0" />
+            <TextField fx:id="txtAuthor" layoutX="64.0" layoutY="43.0" prefHeight="25.0" prefWidth="125.0" />
+            <TextField fx:id="txtPublisher" layoutX="64.0" layoutY="78.0" prefHeight="25.0" prefWidth="125.0" />
             <Label layoutX="7.0" layoutY="43.0" prefHeight="25.0" prefWidth="41.0" text="Author" />
             <Label layoutX="7.0" layoutY="78.0" prefHeight="25.0" prefWidth="50.0" text="Publisher" />
             <Label layoutX="224.0" layoutY="10.0" prefHeight="25.0" prefWidth="81.0" text="Public Year" />
-            <TextField layoutX="305.0" layoutY="10.0" prefHeight="25.0" prefWidth="81.0" />
+            <TextField fx:id="txtYear" layoutX="305.0" layoutY="10.0" prefHeight="25.0" prefWidth="81.0" />
             <Label layoutX="225.0" layoutY="43.0" prefHeight="25.0" prefWidth="81.0" text="Import price" />
             <Label layoutX="225.0" layoutY="78.0" prefHeight="25.0" prefWidth="81.0" text="Export price" />
-            <TextField layoutX="305.0" layoutY="78.0" prefHeight="25.0" prefWidth="81.0" />
-            <TextField layoutX="305.0" layoutY="43.0" prefHeight="25.0" prefWidth="81.0" />
-            <TextField layoutX="463.0" layoutY="10.0" prefHeight="25.0" prefWidth="41.0" />
+            <TextField fx:id="txtExportPrice" layoutX="305.0" layoutY="78.0" prefHeight="25.0" prefWidth="81.0" />
+            <TextField fx:id="txtImportPrice" layoutX="305.0" layoutY="43.0" prefHeight="25.0" prefWidth="81.0" />
+            <TextField fx:id="txtSize" layoutX="463.0" layoutY="10.0" prefHeight="25.0" prefWidth="41.0" />
             <Label layoutX="413.0" layoutY="10.0" prefHeight="25.0" prefWidth="41.0" text="Size" />
             <Label layoutX="413.0" layoutY="43.0" prefHeight="25.0" prefWidth="50.0" text="Duration" />
-            <TextField layoutX="463.0" layoutY="43.0" prefHeight="25.0" prefWidth="41.0" />
-            <Button layoutX="26.0" layoutY="132.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="72.0" text="ADD" />
-            <Button layoutX="127.0" layoutY="132.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="72.0" text="UPDATE" />
-            <Button layoutX="229.0" layoutY="132.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="72.0" text="RESET" />
-            <Button layoutX="334.0" layoutY="132.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="72.0" text="FIND" />
+            <TextField fx:id="txtDuration" layoutX="463.0" layoutY="43.0" prefHeight="25.0" prefWidth="41.0" />
+            <Button fx:id="btnAdd" layoutX="26.0" layoutY="132.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="72.0" text="ADD" />
+            <Button fx:id="btnUpdate" layoutX="127.0" layoutY="132.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="72.0" text="UPDATE" />
+            <Button fx:id="btnReset" layoutX="229.0" layoutY="132.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="72.0" text="RESET" />
+            <Button fx:id="btnFind" layoutX="334.0" layoutY="132.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="72.0" text="FIND" />
          </children>
       </Pane>
       <TableView layoutX="203.0" layoutY="227.0" prefHeight="253.0" prefWidth="635.0">
@@ -47,7 +47,7 @@
          </columns>
       </TableView>
       <Line endX="-100.0" endY="241.0" layoutX="291.0" layoutY="239.0" startX="-100.0" startY="-239.0" />
-      <Button layoutX="18.0" layoutY="54.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="155.0" text="BOOK MANAGEMENT" />
-      <Button layoutX="18.0" layoutY="139.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="155.0" text="DVD MANAGEMENT" />
+      <Button fx:id="btnBook" layoutX="18.0" layoutY="54.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="155.0" text="BOOK MANAGEMENT" />
+      <Button fx:id="btnDvd" layoutX="18.0" layoutY="139.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="155.0" text="DVD MANAGEMENT" />
    </children>
 </Pane>

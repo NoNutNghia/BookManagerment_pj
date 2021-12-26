@@ -1,5 +1,4 @@
 package models;
-import models.Product;
 
 public class Book extends Product {
     private int numberOfPage;
@@ -50,6 +49,6 @@ public class Book extends Product {
 
     @Override
     public String toString() {
-        return super.toString() + "|Number of page: " + numberOfPage + "|Length: " + length + "|Width: " + width ;
+        return super.toString() + "|Number of page: " + numberOfPage + "|Length: " + length + "|Width: " + width;
     }
 }

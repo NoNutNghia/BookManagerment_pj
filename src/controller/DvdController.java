@@ -1,5 +1,6 @@
 package controller;
 
+import controller.request.dvd.SearchDvdRequest;
 import models.Dvd;
 import service.DvdService;
 
@@ -29,5 +30,9 @@ public class DvdController {
 
     public void delete(int id) {
         dvdService.deleteDvd(id);
+    }
+
+    public List<Dvd> search(SearchDvdRequest searchDvdRequest) {
+        return dvdService.searchDvd(searchDvdRequest);
     }
 }

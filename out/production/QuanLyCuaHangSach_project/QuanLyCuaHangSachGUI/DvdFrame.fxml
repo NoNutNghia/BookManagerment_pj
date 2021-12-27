@@ -10,9 +10,10 @@
 <?import javafx.scene.shape.Line?>
 
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="481.0" prefWidth="842.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="481.0" prefWidth="853.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+fx:controller="controller.DvdController">
    <children>
-      <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="843.0">
+      <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="852.0">
          <children>
             <Pane layoutX="203.0" layoutY="14.0" prefHeight="171.0" prefWidth="635.0">
                <children>
@@ -23,21 +24,19 @@
                   <Label layoutX="7.0" layoutY="43.0" prefHeight="25.0" prefWidth="41.0" text="Author" />
                   <Label layoutX="7.0" layoutY="78.0" prefHeight="25.0" prefWidth="50.0" text="Publisher" />
                   <Label layoutX="224.0" layoutY="10.0" prefHeight="25.0" prefWidth="81.0" text="Public Year" />
-                  <TextField fx:id="txtPublicYear" layoutX="305.0" layoutY="10.0" prefHeight="25.0" prefWidth="81.0" />
+                  <TextField fx:id="txtYear" layoutX="305.0" layoutY="10.0" prefHeight="25.0" prefWidth="81.0" />
                   <Label layoutX="225.0" layoutY="43.0" prefHeight="25.0" prefWidth="81.0" text="Import price" />
                   <Label layoutX="225.0" layoutY="78.0" prefHeight="25.0" prefWidth="81.0" text="Export price" />
                   <TextField fx:id="txtExportPrice" layoutX="305.0" layoutY="78.0" prefHeight="25.0" prefWidth="81.0" />
                   <TextField fx:id="txtImportPrice" layoutX="305.0" layoutY="43.0" prefHeight="25.0" prefWidth="81.0" />
-                  <Label layoutX="418.0" layoutY="78.0" prefHeight="25.0" prefWidth="131.0" text="Number of Page" />
-                  <TextField fx:id="txtWidth" layoutX="463.0" layoutY="10.0" prefHeight="25.0" prefWidth="41.0" />
-                  <Label layoutX="418.0" layoutY="10.0" prefHeight="25.0" prefWidth="41.0" text="Width" />
-                  <Label layoutX="418.0" layoutY="43.0" prefHeight="25.0" prefWidth="41.0" text="Length" />
-                  <TextField fx:id="txtNbrPage" layoutX="520.0" layoutY="78.0" prefHeight="25.0" prefWidth="41.0" />
-                  <TextField fx:id="txtLength" layoutX="463.0" layoutY="43.0" prefHeight="25.0" prefWidth="41.0" />
-                  <Button fx:id="btnAdd" layoutX="26.0" layoutY="132.0" mnemonicParsing="false" onAction="#addItemAction" prefHeight="25.0" prefWidth="72.0" text="ADD" />
-                  <Button fx:id="btnUpdate" layoutX="127.0" layoutY="132.0" mnemonicParsing="false" onAction="#updateItemAction" prefHeight="25.0" prefWidth="72.0" text="UPDATE" />
-                  <Button fx:id="btnReset" layoutX="229.0" layoutY="132.0" mnemonicParsing="false" onAction="#resetItemAction" prefHeight="25.0" prefWidth="72.0" text="RESET" />
-                  <Button fx:id="btnFind" layoutX="334.0" layoutY="132.0" mnemonicParsing="false" onAction="#findItemAction" prefHeight="25.0" prefWidth="72.0" text="FIND" />
+                  <TextField fx:id="txtSize" layoutX="463.0" layoutY="10.0" prefHeight="25.0" prefWidth="41.0" />
+                  <Label layoutX="413.0" layoutY="10.0" prefHeight="25.0" prefWidth="41.0" text="Size" />
+                  <Label layoutX="413.0" layoutY="43.0" prefHeight="25.0" prefWidth="50.0" text="Duration" />
+                  <TextField fx:id="txtDuration" layoutX="463.0" layoutY="43.0" prefHeight="25.0" prefWidth="41.0" />
+                  <Button fx:id="btnAdd" layoutX="26.0" layoutY="132.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="72.0" text="ADD" />
+                  <Button fx:id="btnUpdate" layoutX="127.0" layoutY="132.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="72.0" text="UPDATE" />
+                  <Button fx:id="btnReset" layoutX="229.0" layoutY="132.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="72.0" text="RESET" />
+                  <Button fx:id="btnFind" layoutX="334.0" layoutY="132.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="72.0" text="FIND" />
                </children>
             </Pane>
             <TableView layoutX="203.0" layoutY="227.0" prefHeight="253.0" prefWidth="635.0">
@@ -53,8 +52,8 @@
                </columns>
             </TableView>
             <Line endX="-100.0" endY="241.0" layoutX="291.0" layoutY="239.0" startX="-100.0" startY="-239.0" />
-            <Button layoutX="18.0" layoutY="54.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="155.0" text="BOOK MANAGEMENT" />
-            <Button layoutX="18.0" layoutY="139.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="155.0" text="DVD MANAGEMENT" />
+            <Button fx:id="btnBook" layoutX="18.0" layoutY="54.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="155.0" text="BOOK MANAGEMENT" />
+            <Button fx:id="btnDvd" layoutX="18.0" layoutY="139.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="155.0" text="DVD MANAGEMENT" />
          </children>
       </Pane>
    </children>

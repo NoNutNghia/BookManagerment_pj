@@ -1,5 +1,6 @@
 package controller;
 
+import controller.request.book.SearchBookRequest;
 import models.Book;
 import service.BookService;
 
@@ -28,5 +29,9 @@ public class BookController {
 
     public void delete(int id) {
         bookService.deleteBook(id);
+    }
+
+    public List<Book> search(SearchBookRequest searchBookRequest) {
+        return bookService.searchBook(searchBookRequest);
     }
 }

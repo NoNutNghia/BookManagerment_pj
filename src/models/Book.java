@@ -23,6 +23,13 @@ public class Book extends Product {
         this.width = width;
     }
 
+    public Book(String title, String author, String publisher, Integer publicYear, Integer importPrice, Integer exportPrice, Integer nbrPage, Integer width, Integer length) {
+        super(title, author, publicYear, publisher, importPrice, exportPrice);
+        this.numberOfPage = nbrPage;
+        this.length = length;
+        this.width = width;
+    }
+
     public int getNumberOfPage() {
         return numberOfPage;
     }

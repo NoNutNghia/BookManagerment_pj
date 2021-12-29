@@ -34,4 +34,5 @@ public class BookController {
     public List<Book> search(SearchBookRequest searchBookRequest) {
         return bookService.searchBook(searchBookRequest);
     }
+
 }

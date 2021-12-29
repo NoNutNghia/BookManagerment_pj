@@ -9,15 +9,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="481.0" prefWidth="842.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="481.0" prefWidth="848.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+fx:controller="service.impl.BookServiceImpl">
    <children>
       <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="843.0">
          <children>
             <Pane layoutX="203.0" layoutY="14.0" prefHeight="171.0" prefWidth="635.0">
                <children>
                   <Label layoutX="7.0" layoutY="10.0" prefHeight="25.0" prefWidth="30.0" text="Title" />
-                  <TextField fx:id="txtTitle" layoutX="62.0" layoutY="10.0" prefHeight="25.0" prefWidth="125.0" />
+                  <TextField fx:id="txtTitle" layoutX="65.0" layoutY="10.0" prefHeight="25.0" prefWidth="125.0" />
                   <TextField fx:id="txtAuthor" layoutX="64.0" layoutY="43.0" prefHeight="25.0" prefWidth="125.0" />
                   <TextField fx:id="txtPublisher" layoutX="64.0" layoutY="78.0" prefHeight="25.0" prefWidth="125.0" />
                   <Label layoutX="7.0" layoutY="43.0" prefHeight="25.0" prefWidth="41.0" text="Author" />
@@ -34,13 +34,14 @@
                   <Label layoutX="418.0" layoutY="43.0" prefHeight="25.0" prefWidth="41.0" text="Length" />
                   <TextField fx:id="txtNbrPage" layoutX="520.0" layoutY="78.0" prefHeight="25.0" prefWidth="41.0" />
                   <TextField fx:id="txtLength" layoutX="463.0" layoutY="43.0" prefHeight="25.0" prefWidth="41.0" />
-                  <Button fx:id="btnAdd" layoutX="26.0" layoutY="132.0" mnemonicParsing="false" onAction="#addItemAction" prefHeight="25.0" prefWidth="72.0" text="ADD" />
-                  <Button fx:id="btnUpdate" layoutX="127.0" layoutY="132.0" mnemonicParsing="false" onAction="#updateItemAction" prefHeight="25.0" prefWidth="72.0" text="UPDATE" />
-                  <Button fx:id="btnReset" layoutX="229.0" layoutY="132.0" mnemonicParsing="false" onAction="#resetItemAction" prefHeight="25.0" prefWidth="72.0" text="RESET" />
-                  <Button fx:id="btnFind" layoutX="334.0" layoutY="132.0" mnemonicParsing="false" onAction="#findItemAction" prefHeight="25.0" prefWidth="72.0" text="FIND" />
+                  <Button fx:id="btnAdd" layoutX="26.0" layoutY="132.0" mnemonicParsing="false" onAction="#insertBookImpl" prefHeight="25.0" prefWidth="72.0" text="ADD" />
+                  <Button fx:id="btnUpdate" layoutX="127.0" layoutY="132.0" mnemonicParsing="false" onAction="#updateBook" prefHeight="25.0" prefWidth="72.0" text="UPDATE" />
+                  <Button fx:id="btnReset" layoutX="229.0" layoutY="132.0" mnemonicParsing="false" onAction="#resetField" prefHeight="25.0" prefWidth="72.0" text="RESET" />
+                  <Button fx:id="btnSearch" layoutX="439.0" layoutY="132.0" mnemonicParsing="false" onAction="#searchBook" prefHeight="25.0" prefWidth="72.0" text="SEARCH" />
+                  <Button fx:id="btnDelete" layoutX="333.0" layoutY="132.0" mnemonicParsing="false" onAction="#deleteBook" prefHeight="25.0" prefWidth="72.0" text="DELETE" />
                </children>
             </Pane>
-            <TableView layoutX="203.0" layoutY="227.0" prefHeight="253.0" prefWidth="635.0">
+            <TableView fx:id="tblBook" layoutX="203.0" layoutY="227.0" prefHeight="253.0" prefWidth="635.0">
                <columns>
                   <TableColumn prefWidth="29.59990692138672" text="ID" />
                   <TableColumn prefWidth="35.199951171875" text="Title" />
@@ -53,8 +54,8 @@
                </columns>
             </TableView>
             <Line endX="-100.0" endY="241.0" layoutX="291.0" layoutY="239.0" startX="-100.0" startY="-239.0" />
-            <Button layoutX="18.0" layoutY="54.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="155.0" text="BOOK MANAGEMENT" />
-            <Button layoutX="18.0" layoutY="139.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="155.0" text="DVD MANAGEMENT" />
+            <Button fx:id="btnBook" layoutX="18.0" layoutY="54.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="155.0" text="BOOK MANAGEMENT" />
+            <Button fx:id="btnDvd" layoutX="18.0" layoutY="139.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="155.0" text="DVD MANAGEMENT" />
          </children>
       </Pane>
    </children>

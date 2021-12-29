@@ -17,6 +17,12 @@ public class SearchBookRequest {
         this.author = author;
     }
 
+    public SearchBookRequest(String title, String author, Integer publicYear) {
+        this.title = title;
+        this.author = author;
+        this.publicYear = publicYear;
+    }
+
     public Integer getPublicYear() {
         return publicYear;
     }

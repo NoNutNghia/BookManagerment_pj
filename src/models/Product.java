@@ -36,6 +36,15 @@ public class Product {
         this.status = status;
     }
 
+    public Product(String title, String author, int publicYear, String publisher, int importPrice, int exportPrice) {
+        this.title = title;
+        this.author = author;
+        this.publicYear = publicYear;
+        this.publisher = publisher;
+        this.importPrice = importPrice;
+        this.exportPrice = exportPrice;
+    }
+
     public int getId() {
         return id;
     }

@@ -5,6 +5,12 @@ public class SearchDvdRequest {
     private String author;
     private int publicYear;
 
+    public SearchDvdRequest(String title, String author, int publicYear) {
+        this.title = title;
+        this.author = author;
+        this.publicYear = publicYear;
+    }
+
     public String getTitle() {
         return title;
     }

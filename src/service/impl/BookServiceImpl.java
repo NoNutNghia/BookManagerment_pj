@@ -1,16 +1,75 @@
 package service.impl;
 
 import controller.request.book.SearchBookRequest;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import models.Book;
 import service.BookService;
 
+import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class BookServiceImpl implements BookService {
+public class BookServiceImpl implements BookService, Initializable {
+
+    @FXML
+    private TextField txtTitle;
+
+    @FXML
+    private TextField txtAuthor;
+
+    @FXML
+    private TextField txtPublisher;
+
+    @FXML
+    private TextField txtPublicYear;
+
+    @FXML
+    private TextField txtImportPrice;
+
+    @FXML
+    private TextField txtExportPrice;
+
+    @FXML
+    private TextField txtNbrPage;
+
+    @FXML
+    private TextField txtWidth;
+
+    @FXML
+    private TextField txtLength;
+
+    @FXML
+    private Button btnAdd;
+
+    @FXML
+    private Button btnUpdate;
+
+    @FXML
+    private Button btnReset;
+
+    @FXML
+    private Button btnSearch;
+
+    @FXML
+    private Button btnDelete;
+
+    @FXML
+    private Button btnBook;
+
+    @FXML
+    private Button btnDvd;
+
+    @FXML
+    private TableView tblBook;
 
     @Override
     public List<Book> findAll() {
@@ -19,11 +78,10 @@ public class BookServiceImpl implements BookService {
         Connection connection = null;
         Statement statement = null;
         try {
-            //Lay tat ca sach
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bookmanager_db", "root", "");
 
             //Query
-            String sql = "select * from book";
+            String sql = "select * from book where status = 1";
             statement = connection.createStatement();
 
             ResultSet resultSet = statement.executeQuery(sql);
@@ -38,6 +96,11 @@ public class BookServiceImpl implements BookService {
                 bookList.add(book);
             }
 
+//            for (Book bookEntity : bookList) {
+//                bookEntity
+//                        btnUpdate
+//                        btnDelete
+//            }
         } catch (SQLException ex) {
             Logger.getLogger(BookServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -65,7 +128,6 @@ public class BookServiceImpl implements BookService {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            //Lay tat ca sach
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bookmanager_db", "root", "");
 
             //Query
@@ -82,6 +144,20 @@ public class BookServiceImpl implements BookService {
             statement.setInt(7, book.getNumberOfPage());
             statement.setInt(8, book.getWidth());
             statement.setInt(9, book.getLength());
+
+            statement.execute();
+
+            txtTitle.setText("");
+            txtAuthor.setText("");
+            txtPublisher.setText("");
+            txtPublicYear.setText("");
+            txtImportPrice.setText("");
+            txtExportPrice.setText("");
+            txtNbrPage.setText("");
+            txtLength.setText("");
+            txtWidth.setText("");
+
+
 
         } catch (SQLException ex) {
             Logger.getLogger(BookServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -109,7 +185,6 @@ public class BookServiceImpl implements BookService {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            //Lay tat ca sach
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bookmanager_db", "root", "");
 
             //Query
@@ -155,7 +230,6 @@ public class BookServiceImpl implements BookService {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            //Lay tat ca sach
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bookmanager_db", "root", "");
 
             //Query
@@ -194,7 +268,6 @@ public class BookServiceImpl implements BookService {
         Connection connection = null;
         Statement statement = null;
         try {
-            //Lay tat ca sach
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bookmanager_db", "root", "");
 
             String title = searchBookRequest.getTitle();
@@ -202,7 +275,7 @@ public class BookServiceImpl implements BookService {
             Integer publicYear = searchBookRequest.getPublicYear();
 
             //Query
-            String sql = "select * from book where title=" + title + "or" +"author=" + author + "or" + "publicYear=" + publicYear;
+            String sql = "select * from book where title=" + title + "or" + "author=" + author + "or" + "publicYear=" + publicYear;
             statement = connection.createStatement();
 
             ResultSet resultSet = statement.executeQuery(sql);
@@ -237,6 +310,61 @@ public class BookServiceImpl implements BookService {
             }
         }
         return bookList;
+    }
+
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+    }
+
+    private void showBook() {
+
+    }
+
+    public void insertBookImpl(ActionEvent actionEvent) {
+        String title = txtTitle.getText();
+        String author = txtAuthor.getText();
+        String publisher = txtPublisher.getText();
+        Integer publicYear = Integer.valueOf(txtPublicYear.getText());
+        Integer importPrice = Integer.valueOf(txtImportPrice.getText());
+        Integer exportPrice = Integer.valueOf(txtExportPrice.getText());
+        Integer nbrPage = Integer.valueOf(txtNbrPage.getText());
+        Integer width = Integer.valueOf(txtWidth.getText());
+        Integer length = Integer.valueOf(txtLength.getText());
+        Book book = new Book(title, author, publisher, publicYear, importPrice, exportPrice, nbrPage, width, length);
+        insertBook(book);
+    }
+
+    public void resetField(ActionEvent actionEvent) {
+        txtTitle.setText("");
+        txtAuthor.setText("");
+        txtPublisher.setText("");
+        txtPublicYear.setText("");
+        txtImportPrice.setText("");
+        txtExportPrice.setText("");
+        txtNbrPage.setText("");
+        txtLength.setText("");
+        txtWidth.setText("");
+
+    }
+
+    public void updateBook(ActionEvent actionEvent) {
+
+
+    }
+
+    public void searchBook(ActionEvent actionEvent) {
+        String title = txtTitle.getText();
+        String author = txtAuthor.getText();
+        Integer publicYear = Integer.valueOf(txtPublicYear.getText());
+
+        SearchBookRequest searchBookRequest = new SearchBookRequest(title, author, publicYear);
+
+        searchBook(searchBookRequest);
+    }
+
+    public void deleteBook(ActionEvent actionEvent) {
     }
 }
 

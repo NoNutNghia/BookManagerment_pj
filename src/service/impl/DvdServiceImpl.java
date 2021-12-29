@@ -1,16 +1,72 @@
 package service.impl;
 
 import controller.request.dvd.SearchDvdRequest;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import models.Dvd;
 import service.DvdService;
 
+import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DvdServiceImpl implements DvdService {
+public class DvdServiceImpl implements DvdService, Initializable {
+
+    @FXML
+    private TextField txtTitle;
+
+    @FXML
+    private TextField txtAuthor;
+
+    @FXML
+    private TextField txtPublisher;
+
+    @FXML
+    private TextField txtPublicYear;
+
+    @FXML
+    private TextField txtImportPrice;
+
+    @FXML
+    private TextField txtExportPrice;
+
+    @FXML
+    private TextField txtSize;
+
+    @FXML
+    private TextField txtDuration;
+
+    @FXML
+    private Button btnAdd;
+
+    @FXML
+    private Button btnUpdate;
+
+    @FXML
+    private Button btnReset;
+
+    @FXML
+    private Button btnSearch;
+
+    @FXML
+    private Button btnDelete;
+
+    @FXML
+    private Button btnBook;
+
+    @FXML
+    private Button btnDvd;
+
+    @FXML
+    private TableView tblDvd;
 
     @Override
     public List<Dvd> findAll() {
@@ -80,6 +136,17 @@ public class DvdServiceImpl implements DvdService {
             statement.setInt(6, dvd.getExportPrice());
             statement.setInt(7, dvd.getSize());
             statement.setInt(8, dvd.getDuration());
+
+            statement.execute();
+
+            txtTitle.setText("");
+            txtAuthor.setText("");
+            txtPublisher.setText("");
+            txtPublicYear.setText("");
+            txtImportPrice.setText("");
+            txtExportPrice.setText("");
+            txtSize.setText("");
+            txtDuration.setText("");
 
         } catch(SQLException ex) {
             Logger.getLogger(DvdServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -234,4 +301,50 @@ public class DvdServiceImpl implements DvdService {
         }
         return dvdList;
     }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+    }
+
+    public void insertDvd(ActionEvent actionEvent) {
+        String title = txtTitle.getText();
+        String author = txtAuthor.getText();
+        String publisher = txtPublisher.getText();
+        Integer publicYear = Integer.valueOf(txtPublicYear.getText());
+        Integer importPrice = Integer.valueOf(txtImportPrice.getText());
+        Integer exportPrice = Integer.valueOf(txtExportPrice.getText());
+        Integer size = Integer.valueOf(txtSize.getText());
+        Integer duration = Integer.valueOf(txtDuration.getText());
+        Dvd dvd = new Dvd(title, author, publicYear, publisher, importPrice, exportPrice, size, duration);
+        insertDvd(dvd);
+    }
+
+    public void updateDvd(ActionEvent actionEvent) {
+    }
+
+
+    public void resetField(ActionEvent actionEvent) {
+        txtTitle.setText("");
+        txtAuthor.setText("");
+        txtPublisher.setText("");
+        txtPublicYear.setText("");
+        txtImportPrice.setText("");
+        txtExportPrice.setText("");
+        txtSize.setText("");
+        txtDuration.setText("");
+    }
+
+    public void searchDvd(ActionEvent actionEvent) {
+        String title = txtTitle.getText();
+        String author = txtAuthor.getText();
+        Integer publicYear = Integer.valueOf(txtPublicYear.getText());
+
+        SearchDvdRequest searchDvdRequest = new SearchDvdRequest(title, author, publicYear);
+        searchDvd(searchDvdRequest);
+    }
+
+    public void deleteDvd(ActionEvent actionEvent) {
+    }
+
 }

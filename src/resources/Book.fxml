@@ -7,14 +7,12 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="481.0" prefWidth="848.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-fx:controller="service.impl.BookServiceImpl">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="481.0" prefWidth="848.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="service.impl.BookServiceImpl">
    <children>
       <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="843.0">
          <children>
-            <Pane layoutX="203.0" layoutY="14.0" prefHeight="171.0" prefWidth="635.0">
+            <Pane layoutX="7.0" layoutY="6.0" prefHeight="197.0" prefWidth="836.0">
                <children>
                   <Label layoutX="7.0" layoutY="10.0" prefHeight="25.0" prefWidth="30.0" text="Title" />
                   <TextField fx:id="txtTitle" layoutX="65.0" layoutY="10.0" prefHeight="25.0" prefWidth="125.0" />
@@ -34,28 +32,32 @@ fx:controller="service.impl.BookServiceImpl">
                   <Label layoutX="418.0" layoutY="43.0" prefHeight="25.0" prefWidth="41.0" text="Length" />
                   <TextField fx:id="txtNbrPage" layoutX="520.0" layoutY="78.0" prefHeight="25.0" prefWidth="41.0" />
                   <TextField fx:id="txtLength" layoutX="463.0" layoutY="43.0" prefHeight="25.0" prefWidth="41.0" />
-                  <Button fx:id="btnAdd" layoutX="26.0" layoutY="132.0" mnemonicParsing="false" onAction="#insertBookImpl" prefHeight="25.0" prefWidth="72.0" text="ADD" />
-                  <Button fx:id="btnUpdate" layoutX="127.0" layoutY="132.0" mnemonicParsing="false" onAction="#updateBook" prefHeight="25.0" prefWidth="72.0" text="UPDATE" />
-                  <Button fx:id="btnReset" layoutX="229.0" layoutY="132.0" mnemonicParsing="false" onAction="#resetField" prefHeight="25.0" prefWidth="72.0" text="RESET" />
-                  <Button fx:id="btnSearch" layoutX="439.0" layoutY="132.0" mnemonicParsing="false" onAction="#searchBook" prefHeight="25.0" prefWidth="72.0" text="SEARCH" />
-                  <Button fx:id="btnDelete" layoutX="333.0" layoutY="132.0" mnemonicParsing="false" onAction="#deleteBook" prefHeight="25.0" prefWidth="72.0" text="DELETE" />
+                  <Button fx:id="btnAdd" layoutX="12.0" layoutY="132.0" mnemonicParsing="false" onAction="#insertBookImpl" prefHeight="25.0" prefWidth="72.0" text="ADD" />
+                  <Button fx:id="btnUpdate" layoutX="111.0" layoutY="132.0" mnemonicParsing="false" onAction="#updateBook" prefHeight="25.0" prefWidth="72.0" text="UPDATE" />
+                  <Button fx:id="btnReset" layoutX="211.0" layoutY="132.0" mnemonicParsing="false" onAction="#resetField" prefHeight="25.0" prefWidth="72.0" text="RESET" />
+                  <Button fx:id="btnSearch" layoutX="412.0" layoutY="132.0" mnemonicParsing="false" onAction="#searchBook" prefHeight="25.0" prefWidth="72.0" text="SEARCH" />
+                  <Button fx:id="btnDelete" layoutX="310.0" layoutY="132.0" mnemonicParsing="false" onAction="#deleteBook" prefHeight="25.0" prefWidth="72.0" text="DELETE" />
+                  <Button fx:id="btnSell" layoutX="513.0" layoutY="132.0" mnemonicParsing="false" onAction="#sellBook" prefHeight="25.0" prefWidth="65.0" text="SELL" />
+                  <Button fx:id="btnDvd" layoutX="624.0" layoutY="36.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="197.0" text="DVD MANAGEMENT" />
+                  <Button fx:id="btnInterest" layoutX="624.0" layoutY="132.0" mnemonicParsing="false" onAction="#interestMoney" prefHeight="25.0" prefWidth="72.0" text="INTEREST" />
+                  <TextField fx:id="txtInterest" editable="false" layoutX="707.0" layoutY="132.0" prefHeight="25.0" prefWidth="115.0" />
                </children>
             </Pane>
-            <TableView fx:id="tblBook" layoutX="203.0" layoutY="227.0" prefHeight="253.0" prefWidth="635.0">
+            <TableView fx:id="tblBook" layoutX="5.0" layoutY="227.0" prefHeight="253.0" prefWidth="836.0">
                <columns>
-                  <TableColumn prefWidth="29.59990692138672" text="ID" />
-                  <TableColumn prefWidth="35.199951171875" text="Title" />
-                  <TableColumn prefWidth="47.20001220703125" text="Author" />
-                  <TableColumn prefWidth="58.4000244140625" text="Publisher" />
-                  <TableColumn prefWidth="72.79998779296875" text="Public Year" />
-                  <TableColumn prefWidth="75.99993896484375" text="Import Price" />
-                  <TableColumn prefWidth="80.79998779296875" text="Export Price" />
-                  <TableColumn prefWidth="93.60003662109375" text="Number of Page" />
+                  <TableColumn fx:id="col_id" prefWidth="29.59990692138672" text="ID" />
+                  <TableColumn fx:id="col_title" prefWidth="101.59997177124023" text="Title" />
+                  <TableColumn fx:id="col_author" prefWidth="100.0" text="Author" />
+                  <TableColumn fx:id="col_publisher" prefWidth="73.5999755859375" text="Publisher" />
+                  <TableColumn fx:id="col_publicYear" prefWidth="109.60003662109375" text="Public Year" />
+                  <TableColumn fx:id="col_importPrice" prefWidth="89.5999755859375" text="Import Price" />
+                  <TableColumn fx:id="col_exportPrice" prefWidth="85.60003662109375" text="Export Price" />
+                  <TableColumn fx:id="col_nbrPage" prefWidth="103.99993896484375" text="Number of Page" />
+                  <TableColumn fx:id="col_length" prefWidth="47.20001220703125" text="Length" />
+                  <TableColumn fx:id="col_width" minWidth="9.599853515625" prefWidth="48.0" text="Width" />
+                  <TableColumn fx:id="col_status" prefWidth="44.0" text="Status" />
                </columns>
             </TableView>
-            <Line endX="-100.0" endY="241.0" layoutX="291.0" layoutY="239.0" startX="-100.0" startY="-239.0" />
-            <Button fx:id="btnBook" layoutX="18.0" layoutY="54.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="155.0" text="BOOK MANAGEMENT" />
-            <Button fx:id="btnDvd" layoutX="18.0" layoutY="139.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="155.0" text="DVD MANAGEMENT" />
          </children>
       </Pane>
    </children>

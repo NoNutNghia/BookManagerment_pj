@@ -1,12 +1,17 @@
 package service.impl;
 
 import controller.request.dvd.SearchDvdRequest;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import models.Book;
 import models.Dvd;
 import service.DvdService;
 
@@ -60,17 +65,34 @@ public class DvdServiceImpl implements DvdService, Initializable {
     private Button btnDelete;
 
     @FXML
-    private Button btnBook;
+    private TableView<Dvd> tblDvd;
 
     @FXML
-    private Button btnDvd;
-
+    private TableColumn<Dvd, String> col_id;
     @FXML
-    private TableView tblDvd;
+    private TableColumn<Dvd, String> col_title;
+    @FXML
+    private TableColumn<Dvd, String> col_author;
+    @FXML
+    private TableColumn<Dvd, String> col_publisher;
+    @FXML
+    private TableColumn<Dvd, Integer> col_publicYear;
+    @FXML
+    private TableColumn<Dvd, Integer> col_importPrice;
+    @FXML
+    private TableColumn<Dvd, Integer> col_exportPrice;
+    @FXML
+    private TableColumn<Dvd, Integer> col_size;
+    @FXML
+    private TableColumn<Dvd, Integer> col_duration;
+    @FXML
+    private TableColumn<Dvd, Integer> col_status;
+
+    ObservableList<Dvd> oblist = FXCollections.observableArrayList();
 
     @Override
-    public List<Dvd> findAll() {
-        List<Dvd> dvdList = new ArrayList<>();
+    public ObservableList<Dvd> findAll() {
+        ObservableList<Dvd> dvdList = FXCollections.observableArrayList();
 
         Connection connection = null;
         Statement statement = null;
@@ -252,13 +274,12 @@ public class DvdServiceImpl implements DvdService, Initializable {
     }
 
     @Override
-    public List<Dvd> searchDvd(SearchDvdRequest searchDvdRequest) {
-        List<Dvd> dvdList = new ArrayList<>();
+    public ObservableList<Dvd> searchDvd(SearchDvdRequest searchDvdRequest) {
+        ObservableList<Dvd> dvdList = FXCollections.observableArrayList();
 
         Connection connection = null;
         Statement statement = null;
         try {
-            //Lay tat ca dia
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bookmanager_db", "root", "");
 
             String title = searchDvdRequest.getTitle();
@@ -266,7 +287,7 @@ public class DvdServiceImpl implements DvdService, Initializable {
             Integer publicYear = searchDvdRequest.getPublicYear();
 
             //Query
-            String sql = "select * from book where title=" + title + "or" +"author=" + author + "or" + "publicYear=" + publicYear;
+            String sql = "select * from dvd where title="+ "'" + title + "'" + " and " + "author=" + "'" + author + "'" + " and " + "publicYear=" + publicYear;
             statement = connection.createStatement();
 
             ResultSet resultSet = statement.executeQuery(sql);
@@ -304,6 +325,23 @@ public class DvdServiceImpl implements DvdService, Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        showDvd();
+    }
+
+    private void showDvd() {
+        col_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        col_title.setCellValueFactory(new PropertyValueFactory<>("title"));
+        col_author.setCellValueFactory(new PropertyValueFactory<>("author"));
+        col_publisher.setCellValueFactory(new PropertyValueFactory<>("publisher"));
+        col_publicYear.setCellValueFactory(new PropertyValueFactory<>("publicYear"));
+        col_importPrice.setCellValueFactory(new PropertyValueFactory<>("importPrice"));
+        col_exportPrice.setCellValueFactory(new PropertyValueFactory<>("exportPrice"));
+        col_size.setCellValueFactory(new PropertyValueFactory<>("size"));
+        col_duration.setCellValueFactory(new PropertyValueFactory<>("duration"));
+        col_status.setCellValueFactory(new PropertyValueFactory<>("status"));
+
+        oblist = findAll();
+        tblDvd.setItems(oblist);
 
     }
 
@@ -318,9 +356,13 @@ public class DvdServiceImpl implements DvdService, Initializable {
         Integer duration = Integer.valueOf(txtDuration.getText());
         Dvd dvd = new Dvd(title, author, publicYear, publisher, importPrice, exportPrice, size, duration);
         insertDvd(dvd);
+
+        showDvd();
     }
 
     public void updateDvd(ActionEvent actionEvent) {
+
+        showDvd();
     }
 
 
@@ -341,10 +383,31 @@ public class DvdServiceImpl implements DvdService, Initializable {
         Integer publicYear = Integer.valueOf(txtPublicYear.getText());
 
         SearchDvdRequest searchDvdRequest = new SearchDvdRequest(title, author, publicYear);
-        searchDvd(searchDvdRequest);
+
+        col_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        col_title.setCellValueFactory(new PropertyValueFactory<>("title"));
+        col_author.setCellValueFactory(new PropertyValueFactory<>("author"));
+        col_publisher.setCellValueFactory(new PropertyValueFactory<>("publisher"));
+        col_publicYear.setCellValueFactory(new PropertyValueFactory<>("publicYear"));
+        col_importPrice.setCellValueFactory(new PropertyValueFactory<>("importPrice"));
+        col_exportPrice.setCellValueFactory(new PropertyValueFactory<>("exportPrice"));
+        col_size.setCellValueFactory(new PropertyValueFactory<>("size"));
+        col_duration.setCellValueFactory(new PropertyValueFactory<>("duration"));
+        col_status.setCellValueFactory(new PropertyValueFactory<>("status"));
+
+        oblist = searchDvd(searchDvdRequest);
+        tblDvd.setItems(oblist);
+
     }
 
     public void deleteDvd(ActionEvent actionEvent) {
+
+        showDvd();
     }
 
+    public void sellDvd(ActionEvent actionEvent) {
+    }
+
+    public void interestMoney(ActionEvent actionEvent) {
+    }
 }

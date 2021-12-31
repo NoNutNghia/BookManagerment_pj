@@ -1,12 +1,16 @@
 package service.impl;
 
 import controller.request.book.SearchBookRequest;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import models.Book;
 import service.BookService;
 
@@ -19,6 +23,34 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class BookServiceImpl implements BookService, Initializable {
+
+    @FXML
+    private TableView<Book> tblBook;
+
+    @FXML
+    private TableColumn<Book, String> col_id;
+    @FXML
+    private TableColumn<Book, String> col_title;
+    @FXML
+    private TableColumn<Book, String> col_author;
+    @FXML
+    private TableColumn<Book, String> col_publisher;
+    @FXML
+    private TableColumn<Book, Integer> col_publicYear;
+    @FXML
+    private TableColumn<Book, Integer> col_importPrice;
+    @FXML
+    private TableColumn<Book, Integer> col_exportPrice;
+    @FXML
+    private TableColumn<Book, Integer> col_nbrPage;
+    @FXML
+    private TableColumn<Book, Integer> col_length;
+    @FXML
+    private TableColumn<Book, Integer> col_width;
+    @FXML
+    private TableColumn<Book, Integer> col_status;
+
+    ObservableList<Book> oblist = FXCollections.observableArrayList();
 
     @FXML
     private TextField txtTitle;
@@ -62,18 +94,9 @@ public class BookServiceImpl implements BookService, Initializable {
     @FXML
     private Button btnDelete;
 
-    @FXML
-    private Button btnBook;
-
-    @FXML
-    private Button btnDvd;
-
-    @FXML
-    private TableView tblBook;
-
     @Override
-    public List<Book> findAll() {
-        List<Book> bookList = new ArrayList<>();
+    public ObservableList<Book> findAll() {
+        ObservableList<Book> bookList = FXCollections.observableArrayList();
 
         Connection connection = null;
         Statement statement = null;
@@ -81,7 +104,7 @@ public class BookServiceImpl implements BookService, Initializable {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bookmanager_db", "root", "");
 
             //Query
-            String sql = "select * from book where status = 1";
+            String sql = "select * from book";
             statement = connection.createStatement();
 
             ResultSet resultSet = statement.executeQuery(sql);
@@ -96,11 +119,6 @@ public class BookServiceImpl implements BookService, Initializable {
                 bookList.add(book);
             }
 
-//            for (Book bookEntity : bookList) {
-//                bookEntity
-//                        btnUpdate
-//                        btnDelete
-//            }
         } catch (SQLException ex) {
             Logger.getLogger(BookServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -156,8 +174,6 @@ public class BookServiceImpl implements BookService, Initializable {
             txtNbrPage.setText("");
             txtLength.setText("");
             txtWidth.setText("");
-
-
 
         } catch (SQLException ex) {
             Logger.getLogger(BookServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -262,8 +278,8 @@ public class BookServiceImpl implements BookService, Initializable {
     }
 
     @Override
-    public List<Book> searchBook(SearchBookRequest searchBookRequest) {
-        List<Book> bookList = new ArrayList<>();
+    public ObservableList<Book> searchBook(SearchBookRequest searchBookRequest) {
+        ObservableList<Book> bookList = FXCollections.observableArrayList();
 
         Connection connection = null;
         Statement statement = null;
@@ -275,7 +291,7 @@ public class BookServiceImpl implements BookService, Initializable {
             Integer publicYear = searchBookRequest.getPublicYear();
 
             //Query
-            String sql = "select * from book where title=" + title + "or" + "author=" + author + "or" + "publicYear=" + publicYear;
+            String sql = "select * from book where title="+ "'" + title + "'" + " and " + "author=" + "'" + author + "'" + " and " + "publicYear=" + publicYear;
             statement = connection.createStatement();
 
             ResultSet resultSet = statement.executeQuery(sql);
@@ -315,10 +331,24 @@ public class BookServiceImpl implements BookService, Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        showBook();
     }
 
     private void showBook() {
+        col_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        col_title.setCellValueFactory(new PropertyValueFactory<>("title"));
+        col_author.setCellValueFactory(new PropertyValueFactory<>("author"));
+        col_publisher.setCellValueFactory(new PropertyValueFactory<>("publisher"));
+        col_publicYear.setCellValueFactory(new PropertyValueFactory<>("publicYear"));
+        col_importPrice.setCellValueFactory(new PropertyValueFactory<>("importPrice"));
+        col_exportPrice.setCellValueFactory(new PropertyValueFactory<>("exportPrice"));
+        col_nbrPage.setCellValueFactory(new PropertyValueFactory<>("numberOfPage"));
+        col_length.setCellValueFactory(new PropertyValueFactory<>("length"));
+        col_width.setCellValueFactory(new PropertyValueFactory<>("width"));
+        col_status.setCellValueFactory(new PropertyValueFactory<>("status"));
+
+        oblist = findAll();
+        tblBook.setItems(oblist);
 
     }
 
@@ -334,6 +364,7 @@ public class BookServiceImpl implements BookService, Initializable {
         Integer length = Integer.valueOf(txtLength.getText());
         Book book = new Book(title, author, publisher, publicYear, importPrice, exportPrice, nbrPage, width, length);
         insertBook(book);
+        showBook();
     }
 
     public void resetField(ActionEvent actionEvent) {
@@ -351,7 +382,7 @@ public class BookServiceImpl implements BookService, Initializable {
 
     public void updateBook(ActionEvent actionEvent) {
 
-
+        showBook();
     }
 
     public void searchBook(ActionEvent actionEvent) {
@@ -361,10 +392,31 @@ public class BookServiceImpl implements BookService, Initializable {
 
         SearchBookRequest searchBookRequest = new SearchBookRequest(title, author, publicYear);
 
-        searchBook(searchBookRequest);
+        col_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        col_title.setCellValueFactory(new PropertyValueFactory<>("title"));
+        col_author.setCellValueFactory(new PropertyValueFactory<>("author"));
+        col_publisher.setCellValueFactory(new PropertyValueFactory<>("publisher"));
+        col_publicYear.setCellValueFactory(new PropertyValueFactory<>("publicYear"));
+        col_importPrice.setCellValueFactory(new PropertyValueFactory<>("importPrice"));
+        col_exportPrice.setCellValueFactory(new PropertyValueFactory<>("exportPrice"));
+        col_nbrPage.setCellValueFactory(new PropertyValueFactory<>("numberOfPage"));
+        col_length.setCellValueFactory(new PropertyValueFactory<>("length"));
+        col_width.setCellValueFactory(new PropertyValueFactory<>("width"));
+        col_status.setCellValueFactory(new PropertyValueFactory<>("status"));
+
+        oblist = searchBook(searchBookRequest);
+        tblBook.setItems(oblist);
     }
 
     public void deleteBook(ActionEvent actionEvent) {
+
+        showBook();
+    }
+
+    public void sellBook(ActionEvent actionEvent) {
+    }
+
+    public void interestMoney(ActionEvent actionEvent) {
     }
 }
 

@@ -33,7 +33,7 @@
                   <TextField fx:id="txtNbrPage" layoutX="520.0" layoutY="78.0" prefHeight="25.0" prefWidth="41.0" />
                   <TextField fx:id="txtLength" layoutX="463.0" layoutY="43.0" prefHeight="25.0" prefWidth="41.0" />
                   <Button fx:id="btnAdd" layoutX="12.0" layoutY="132.0" mnemonicParsing="false" onAction="#insertBookImpl" prefHeight="25.0" prefWidth="72.0" text="ADD" />
-                  <Button fx:id="btnUpdate" layoutX="111.0" layoutY="132.0" mnemonicParsing="false" onAction="#updateBook" prefHeight="25.0" prefWidth="72.0" text="UPDATE" />
+                  <Button fx:id="btnUpdate" disable="true" layoutX="525.0" layoutY="10.0" mnemonicParsing="false" onAction="#updateBook" prefHeight="25.0" prefWidth="72.0" text="UPDATE" />
                   <Button fx:id="btnReset" layoutX="211.0" layoutY="132.0" mnemonicParsing="false" onAction="#resetField" prefHeight="25.0" prefWidth="72.0" text="RESET" />
                   <Button fx:id="btnSearch" layoutX="412.0" layoutY="132.0" mnemonicParsing="false" onAction="#searchBook" prefHeight="25.0" prefWidth="72.0" text="SEARCH" />
                   <Button fx:id="btnDelete" layoutX="310.0" layoutY="132.0" mnemonicParsing="false" onAction="#deleteBook" prefHeight="25.0" prefWidth="72.0" text="DELETE" />
@@ -41,6 +41,7 @@
                   <Button fx:id="btnDvd" layoutX="624.0" layoutY="36.0" mnemonicParsing="false" onAction="#changeLayout" prefHeight="39.0" prefWidth="197.0" text="DVD MANAGEMENT --&gt;" />
                   <Button fx:id="btnInterest" layoutX="624.0" layoutY="132.0" mnemonicParsing="false" onAction="#interestMoney" prefHeight="25.0" prefWidth="72.0" text="INTEREST" />
                   <TextField fx:id="txtInterest" editable="false" layoutX="707.0" layoutY="132.0" prefHeight="25.0" prefWidth="115.0" />
+                  <Button fx:id="btnEdit" layoutX="110.0" layoutY="132.0" mnemonicParsing="false" onAction="#editBook" prefHeight="25.0" prefWidth="72.0" text="EDIT" />
                </children>
             </Pane>
             <TableView fx:id="tblBook" layoutX="5.0" layoutY="227.0" prefHeight="253.0" prefWidth="836.0">

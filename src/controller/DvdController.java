@@ -24,8 +24,8 @@ public class DvdController {
         dvdService.insertDvd(dvd);
     }
 
-    public void update(Dvd dvd) {
-        dvdService.updateDvd(dvd);
+    public void update(Dvd dvd, int id) {
+        dvdService.updateDvd(dvd, id);
     }
 
     public void delete(int id) {

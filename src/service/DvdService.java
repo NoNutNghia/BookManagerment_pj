@@ -10,7 +10,7 @@ public interface DvdService {
 
     void insertDvd(Dvd dvd);
 
-    void updateDvd(Dvd dvd);
+    void updateDvd(Dvd dvd, int id);
 
     void deleteDvd(Integer id);
 

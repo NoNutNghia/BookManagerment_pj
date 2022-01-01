@@ -26,19 +26,20 @@
                   <Label layoutX="225.0" layoutY="78.0" prefHeight="25.0" prefWidth="81.0" text="Export price" />
                   <TextField fx:id="txtExportPrice" layoutX="305.0" layoutY="78.0" prefHeight="25.0" prefWidth="81.0" />
                   <TextField fx:id="txtImportPrice" layoutX="305.0" layoutY="43.0" prefHeight="25.0" prefWidth="81.0" />
-                  <TextField fx:id="txtSize" layoutX="474.0" layoutY="10.0" prefHeight="25.0" prefWidth="41.0" />
+                  <TextField fx:id="txtSize" layoutX="463.0" layoutY="10.0" prefHeight="25.0" prefWidth="41.0" />
                   <Label layoutX="413.0" layoutY="10.0" prefHeight="25.0" prefWidth="41.0" text="Size" />
                   <Label layoutX="413.0" layoutY="43.0" prefHeight="25.0" prefWidth="50.0" text="Duration" />
-                  <TextField fx:id="txtDuration" layoutX="474.0" layoutY="43.0" prefHeight="25.0" prefWidth="41.0" />
+                  <TextField fx:id="txtDuration" layoutX="463.0" layoutY="43.0" prefHeight="25.0" prefWidth="41.0" />
                   <Button fx:id="btnAdd" layoutX="12.0" layoutY="132.0" mnemonicParsing="false" onAction="#insertDvd" prefHeight="25.0" prefWidth="72.0" text="ADD" />
-                  <Button fx:id="btnUpdate" layoutX="109.0" layoutY="132.0" mnemonicParsing="false" onAction="#updateDvd" prefHeight="25.0" prefWidth="72.0" text="UPDATE" />
-                  <Button fx:id="btnReset" layoutX="212.0" layoutY="132.0" mnemonicParsing="false" onAction="#resetField" prefHeight="25.0" prefWidth="72.0" text="RESET" />
+                  <Button fx:id="btnUpdate" disable="true" layoutX="530.0" layoutY="10.0" mnemonicParsing="false" onAction="#updateDvd" prefHeight="25.0" prefWidth="72.0" text="UPDATE" />
+                  <Button fx:id="btnReset" layoutX="204.0" layoutY="132.0" mnemonicParsing="false" onAction="#resetField" prefHeight="25.0" prefWidth="72.0" text="RESET" />
                   <Button fx:id="btnSearch" layoutX="402.0" layoutY="132.0" mnemonicParsing="false" onAction="#searchDvd" prefHeight="25.0" prefWidth="72.0" text="SEARCH" />
-                  <Button fx:id="btnDelete" layoutX="309.0" layoutY="132.0" mnemonicParsing="false" onAction="#deleteDvd" prefHeight="25.0" prefWidth="72.0" text="DELETE" />
+                  <Button fx:id="btnDelete" layoutX="305.0" layoutY="132.0" mnemonicParsing="false" onAction="#deleteDvd" prefHeight="25.0" prefWidth="72.0" text="DELETE" />
                   <Button fx:id="btnSell" layoutX="498.0" layoutY="132.0" mnemonicParsing="false" onAction="#sellDvd" prefHeight="25.0" prefWidth="65.0" text="SELL" />
                   <Button fx:id="btnInterest" layoutX="624.0" layoutY="132.0" mnemonicParsing="false" onAction="#interestMoney" prefHeight="25.0" prefWidth="72.0" text="INTEREST" />
                   <Button fx:id="btnBook" layoutX="624.0" layoutY="36.0" mnemonicParsing="false" onAction="#changeLayout" prefHeight="39.0" prefWidth="197.0" text="&lt;-- BOOK MANAGEMENT" />
                   <TextField fx:id="txtInterest" editable="false" layoutX="706.0" layoutY="132.0" prefHeight="25.0" prefWidth="115.0" />
+                  <Button fx:id="btnEdit" layoutX="108.0" layoutY="132.0" mnemonicParsing="false" onAction="#editDvd" prefHeight="25.0" prefWidth="72.0" text="EDIT" />
                </children>
             </Pane>
             <TableView fx:id="tblDvd" layoutX="5.0" layoutY="227.0" prefHeight="253.0" prefWidth="835.0">

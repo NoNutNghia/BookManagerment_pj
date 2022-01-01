@@ -23,8 +23,8 @@ public class BookController {
         bookService.insertBook(book);
     }
 
-    public void update(Book book) {
-        bookService.updateBook(book);
+    public void update(Book book, int id) {
+        bookService.updateBook(book, id);
     }
 
     public void delete(int id) {

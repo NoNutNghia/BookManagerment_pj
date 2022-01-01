@@ -1,6 +1,9 @@
 package service.impl;
 
+import models.Book;
+import service.BookService;
 import controller.request.book.SearchBookRequest;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,18 +15,20 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import models.Book;
-import service.BookService;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class BookServiceImpl implements BookService, Initializable {
-
+    @FXML
+    private Button btnEdit;
     @FXML
     private Button btnDvd;
     @FXML
@@ -97,6 +102,8 @@ public class BookServiceImpl implements BookService, Initializable {
 
     @FXML
     private Button btnDelete;
+
+    private int id;
 
     @Override
     public ObservableList<Book> findAll() {
@@ -201,7 +208,7 @@ public class BookServiceImpl implements BookService, Initializable {
     }
 
     @Override
-    public void updateBook(Book book) {
+    public void updateBook(Book book, int id) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
@@ -221,7 +228,9 @@ public class BookServiceImpl implements BookService, Initializable {
             statement.setInt(7, book.getNumberOfPage());
             statement.setInt(8, book.getWidth());
             statement.setInt(9, book.getLength());
-            statement.setInt((10), book.getId());
+            statement.setInt(10, id);
+
+            statement.execute();
 
 
         } catch (SQLException ex) {
@@ -380,7 +389,7 @@ public class BookServiceImpl implements BookService, Initializable {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bookmanager_db", "root", "");
 
             //Query
-            String sql = "select importPrice, exportPrice from book ";
+            String sql = "select importPrice, exportPrice from book where status = 0";
             statement = connection.createStatement();
 
             ResultSet resultSet = statement.executeQuery(sql);
@@ -462,9 +471,11 @@ public class BookServiceImpl implements BookService, Initializable {
         txtLength.setText("");
         txtWidth.setText("");
 
+        btnUpdate.setDisable(true);
+        btnEdit.setDisable(false);
     }
 
-    public void updateBook(ActionEvent actionEvent) {
+    public void editBook(ActionEvent actionEvent) {
 
         ObservableList<Book> selectedItem = tblBook.getSelectionModel().getSelectedItems();
         txtTitle.setText(selectedItem.get(0).getTitle());
@@ -476,8 +487,10 @@ public class BookServiceImpl implements BookService, Initializable {
         txtNbrPage.setText(String.valueOf(selectedItem.get(0).getNumberOfPage()));
         txtLength.setText(String.valueOf(selectedItem.get(0).getLength()));
         txtWidth.setText(String.valueOf(selectedItem.get(0).getWidth()));
+        id = selectedItem.get(0).getId();
 
-        showBook();
+        btnUpdate.setDisable(false);
+        btnEdit.setDisable(true);
     }
 
     public void searchBook(ActionEvent actionEvent) {
@@ -509,9 +522,31 @@ public class BookServiceImpl implements BookService, Initializable {
         showBook();
     }
 
-    public void sellBook(ActionEvent actionEvent) {
+    public void sellBook(ActionEvent actionEvent) throws IOException {
         ObservableList<Book> selectedItem = tblBook.getSelectionModel().getSelectedItems();
         setStatus(selectedItem.get(0).getId());
+        try {
+            File fileName = new File("D:\\cast\\Book\\castInfo-" + selectedItem.get(0).getId() +".txt");
+            if (fileName.createNewFile()) {
+                LocalDateTime time = LocalDateTime.now();
+                FileWriter fileWriter = new FileWriter(fileName);
+                fileWriter.write("Title: " + selectedItem.get(0).getTitle() + "\n");
+                fileWriter.write("Author: " + selectedItem.get(0).getAuthor() + "\n");
+                fileWriter.write("Publisher: " + selectedItem.get(0).getPublisher() + "\n");
+                fileWriter.write("Public Year: " + selectedItem.get(0).getPublicYear() + "\n");
+                fileWriter.write("Number of Page: " + selectedItem.get(0).getNumberOfPage() + "\n");
+                fileWriter.write("Price: " + selectedItem.get(0).getExportPrice() + "\n");
+                fileWriter.write("Time at: " + time + "\n");
+                fileWriter.write("==================================================================\n");
+                fileWriter.write("Thank you and have a good day!!!");
+                fileWriter.close();
+            } else {
+                System.out.println("File already exists.");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
         showBook();
     }
 
@@ -528,6 +563,23 @@ public class BookServiceImpl implements BookService, Initializable {
         window.setTitle("DVD Management");
         window.setScene(scene);
         window.show();
+    }
+
+    public void updateBook(ActionEvent actionEvent) {
+        String title = txtTitle.getText();
+        String author = txtAuthor.getText();
+        String publisher = txtPublisher.getText();
+        Integer publicYear = Integer.valueOf(txtPublicYear.getText());
+        Integer importPrice = Integer.valueOf(txtImportPrice.getText());
+        Integer exportPrice = Integer.valueOf(txtExportPrice.getText());
+        Integer nbrPage = Integer.valueOf(txtNbrPage.getText());
+        Integer width = Integer.valueOf(txtWidth.getText());
+        Integer length = Integer.valueOf(txtLength.getText());
+        Book book = new Book(title, author, publisher, publicYear, importPrice, exportPrice, nbrPage, width, length);
+
+        updateBook(book, id);
+        resetField(actionEvent);
+        showBook();
     }
 }
 

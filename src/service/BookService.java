@@ -10,7 +10,7 @@ public interface BookService {
 
     void insertBook(Book book);
 
-    void updateBook(Book book);
+    void updateBook(Book book, int id);
 
     void deleteDvd(Integer id);
 

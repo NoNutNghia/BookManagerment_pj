@@ -18,15 +18,20 @@ import javafx.stage.Stage;
 import models.Dvd;
 import service.DvdService;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DvdServiceImpl implements DvdService, Initializable {
 
+    @FXML
+    private Button btnEdit;
     @FXML
     private TextField txtInterest;
     @FXML
@@ -91,6 +96,8 @@ public class DvdServiceImpl implements DvdService, Initializable {
     private TableColumn<Dvd, Integer> col_duration;
     @FXML
     private TableColumn<Dvd, Integer> col_status;
+
+    private int id;
 
     ObservableList<Dvd> oblist = FXCollections.observableArrayList();
 
@@ -196,7 +203,7 @@ public class DvdServiceImpl implements DvdService, Initializable {
     }
 
     @Override
-    public void updateDvd(Dvd dvd) {
+    public void updateDvd(Dvd dvd, int id) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
@@ -216,7 +223,9 @@ public class DvdServiceImpl implements DvdService, Initializable {
             statement.setInt(6, dvd.getExportPrice());
             statement.setInt(7, dvd.getSize());
             statement.setInt(8, dvd.getDuration());
-            statement.setInt(9, dvd.getId());
+            statement.setInt(9, id);
+
+            statement.execute();
 
 
         } catch(SQLException ex) {
@@ -324,7 +333,7 @@ public class DvdServiceImpl implements DvdService, Initializable {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bookmanager_db", "root", "");
 
             //Query
-            String sql = "select importPrice, exportPrice from dvd ";
+            String sql = "select importPrice, exportPrice from dvd where status = 0";
             statement = connection.createStatement();
 
             ResultSet resultSet = statement.executeQuery(sql);
@@ -426,7 +435,6 @@ public class DvdServiceImpl implements DvdService, Initializable {
 
         oblist = findAll();
         tblDvd.setItems(oblist);
-
     }
 
     public void insertDvd(ActionEvent actionEvent) {
@@ -445,7 +453,17 @@ public class DvdServiceImpl implements DvdService, Initializable {
     }
 
     public void updateDvd(ActionEvent actionEvent) {
-
+        String title = txtTitle.getText();
+        String author = txtAuthor.getText();
+        String publisher = txtPublisher.getText();
+        Integer publicYear = Integer.valueOf(txtPublicYear.getText());
+        Integer importPrice = Integer.valueOf(txtImportPrice.getText());
+        Integer exportPrice = Integer.valueOf(txtExportPrice.getText());
+        Integer size = Integer.valueOf(txtSize.getText());
+        Integer duration = Integer.valueOf(txtDuration.getText());
+        Dvd dvd = new Dvd(title, author, publicYear, publisher , importPrice, exportPrice, size, duration);
+        updateDvd(dvd, id);
+        resetField(actionEvent);
         showDvd();
     }
 
@@ -459,6 +477,9 @@ public class DvdServiceImpl implements DvdService, Initializable {
         txtExportPrice.setText("");
         txtSize.setText("");
         txtDuration.setText("");
+
+        btnUpdate.setDisable(true);
+        btnEdit.setDisable(false);
     }
 
     public void searchDvd(ActionEvent actionEvent) {
@@ -490,9 +511,32 @@ public class DvdServiceImpl implements DvdService, Initializable {
         showDvd();
     }
 
-    public void sellDvd(ActionEvent actionEvent) {
+    public void sellDvd(ActionEvent actionEvent) throws IOException {
         ObservableList<Dvd> selectedItem = tblDvd.getSelectionModel().getSelectedItems();
         setStatus(selectedItem.get(0).getId());
+        try {
+            File fileName = new File("D:\\cast\\Dvd\\castInfo-" + selectedItem.get(0).getId() +".txt");
+            if (fileName.createNewFile()) {
+                LocalDateTime time = LocalDateTime.now();
+                FileWriter fileWriter = new FileWriter(fileName);
+                fileWriter.write("Title: " + selectedItem.get(0).getTitle() + "\n");
+                fileWriter.write("Author: " + selectedItem.get(0).getAuthor() + "\n");
+                fileWriter.write("Publisher: " + selectedItem.get(0).getPublisher() + "\n");
+                fileWriter.write("Public Year: " + selectedItem.get(0).getPublicYear() + "\n");
+                fileWriter.write("Size: " + selectedItem.get(0).getSize() + " KB\n");
+                fileWriter.write("Duration: " + selectedItem.get(0).getDuration() + " (s)\n");
+                fileWriter.write("Price: " + selectedItem.get(0).getExportPrice() + "\n");
+                fileWriter.write("Time at: " + time + "\n");
+                fileWriter.write("==================================================================\n");
+                fileWriter.write("Thank you and have a good day!!!");
+                fileWriter.close();
+            } else {
+                System.out.println("File already exists.");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
         showDvd();
     }
 
@@ -509,5 +553,21 @@ public class DvdServiceImpl implements DvdService, Initializable {
         window.setTitle("Book Management");
         window.setScene(scene);
         window.show();
+    }
+
+    public void editDvd(ActionEvent actionEvent) {
+        ObservableList<Dvd> selectedItem = tblDvd.getSelectionModel().getSelectedItems();
+        txtTitle.setText(selectedItem.get(0).getTitle());
+        txtAuthor.setText(selectedItem.get(0).getAuthor());
+        txtPublisher.setText(selectedItem.get(0).getPublisher());
+        txtPublicYear.setText(String.valueOf(selectedItem.get(0).getPublicYear()));
+        txtImportPrice.setText(String.valueOf(selectedItem.get(0).getImportPrice()));
+        txtExportPrice.setText(String.valueOf(selectedItem.get(0).getExportPrice()));
+        txtSize.setText(String.valueOf(selectedItem.get(0).getSize()));
+        txtDuration.setText(String.valueOf(selectedItem.get(0).getDuration()));
+        id = selectedItem.get(0).getId();
+
+        btnUpdate.setDisable(false);
+        btnEdit.setDisable(true);
     }
 }

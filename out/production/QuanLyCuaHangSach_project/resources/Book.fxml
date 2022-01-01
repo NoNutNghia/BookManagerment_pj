@@ -38,7 +38,7 @@
                   <Button fx:id="btnSearch" layoutX="412.0" layoutY="132.0" mnemonicParsing="false" onAction="#searchBook" prefHeight="25.0" prefWidth="72.0" text="SEARCH" />
                   <Button fx:id="btnDelete" layoutX="310.0" layoutY="132.0" mnemonicParsing="false" onAction="#deleteBook" prefHeight="25.0" prefWidth="72.0" text="DELETE" />
                   <Button fx:id="btnSell" layoutX="513.0" layoutY="132.0" mnemonicParsing="false" onAction="#sellBook" prefHeight="25.0" prefWidth="65.0" text="SELL" />
-                  <Button fx:id="btnDvd" layoutX="624.0" layoutY="36.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="197.0" text="DVD MANAGEMENT" />
+                  <Button fx:id="btnDvd" layoutX="624.0" layoutY="36.0" mnemonicParsing="false" onAction="#changeLayout" prefHeight="39.0" prefWidth="197.0" text="DVD MANAGEMENT --&gt;" />
                   <Button fx:id="btnInterest" layoutX="624.0" layoutY="132.0" mnemonicParsing="false" onAction="#interestMoney" prefHeight="25.0" prefWidth="72.0" text="INTEREST" />
                   <TextField fx:id="txtInterest" editable="false" layoutX="707.0" layoutY="132.0" prefHeight="25.0" prefWidth="115.0" />
                </children>

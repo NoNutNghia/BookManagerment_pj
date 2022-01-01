@@ -12,7 +12,7 @@ public interface BookService {
 
     void updateBook(Book book);
 
-    void deleteBook(Integer id);
+    void deleteDvd(Integer id);
 
     List<Book> searchBook(SearchBookRequest searchBookRequest);
 

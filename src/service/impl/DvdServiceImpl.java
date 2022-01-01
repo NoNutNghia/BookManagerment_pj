@@ -5,26 +5,30 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import models.Book;
+import javafx.stage.Stage;
 import models.Dvd;
 import service.DvdService;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DvdServiceImpl implements DvdService, Initializable {
 
+    @FXML
+    private TextField txtInterest;
     @FXML
     private TextField txtTitle;
 
@@ -101,7 +105,7 @@ public class DvdServiceImpl implements DvdService, Initializable {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bookmanager_db", "root", "");
 
             //Query
-            String sql = "select * from dvd";
+            String sql = "select * from dvd where status=1";
             statement = connection.createStatement();
 
             ResultSet resultSet = statement.executeQuery(sql);
@@ -236,12 +240,48 @@ public class DvdServiceImpl implements DvdService, Initializable {
         }
     }
 
+    public void setStatus(Integer id) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bookmanager_db", "root", "");
+
+            //Query
+            String sql = "update dvd set status=0 where id=?";
+
+            statement = connection.prepareCall(sql);
+
+            statement.setInt(1, id);
+
+            statement.execute();
+
+
+        } catch (SQLException ex) {
+            Logger.getLogger(BookServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(BookServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(BookServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+
+                }
+            }
+        }
+    }
+
     @Override
     public void deleteDvd(Integer id) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            //Lay tat ca dia
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bookmanager_db", "root", "");
 
             //Query
@@ -250,6 +290,8 @@ public class DvdServiceImpl implements DvdService, Initializable {
             statement = connection.prepareCall(sql);
 
             statement.setInt(1, id);
+
+            statement.execute();
 
 
         } catch(SQLException ex) {
@@ -271,6 +313,48 @@ public class DvdServiceImpl implements DvdService, Initializable {
                 }
             }
         }
+    }
+
+    private int interest() {
+        int sumImportPrice = 0, sumExportPrice = 0;
+
+        Connection connection = null;
+        Statement statement = null;
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bookmanager_db", "root", "");
+
+            //Query
+            String sql = "select importPrice, exportPrice from dvd ";
+            statement = connection.createStatement();
+
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+                sumImportPrice += resultSet.getInt("importPrice");
+                sumExportPrice += resultSet.getInt("exportPrice");
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(BookServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(BookServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(BookServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+
+                }
+            }
+        }
+        return (sumExportPrice - sumImportPrice);
+
     }
 
     @Override
@@ -401,13 +485,29 @@ public class DvdServiceImpl implements DvdService, Initializable {
     }
 
     public void deleteDvd(ActionEvent actionEvent) {
-
+        ObservableList<Dvd> selectedItem = tblDvd.getSelectionModel().getSelectedItems();
+        deleteDvd(selectedItem.get(0).getId());
         showDvd();
     }
 
     public void sellDvd(ActionEvent actionEvent) {
+        ObservableList<Dvd> selectedItem = tblDvd.getSelectionModel().getSelectedItems();
+        setStatus(selectedItem.get(0).getId());
+        showDvd();
     }
 
     public void interestMoney(ActionEvent actionEvent) {
+        txtInterest.setText(String.valueOf(interest()));
+    }
+
+    public void changeLayout(ActionEvent actionEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/Book.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 848, 481);
+
+        Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+
+        window.setTitle("Book Management");
+        window.setScene(scene);
+        window.show();
     }
 }

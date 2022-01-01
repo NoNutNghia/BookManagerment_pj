@@ -5,19 +5,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import models.Book;
 import service.BookService;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,8 +25,11 @@ import java.util.logging.Logger;
 public class BookServiceImpl implements BookService, Initializable {
 
     @FXML
+    private Button btnDvd;
+    @FXML
+    private TextField txtInterest;
+    @FXML
     private TableView<Book> tblBook;
-
     @FXML
     private TableColumn<Book, String> col_id;
     @FXML
@@ -51,6 +54,7 @@ public class BookServiceImpl implements BookService, Initializable {
     private TableColumn<Book, Integer> col_status;
 
     ObservableList<Book> oblist = FXCollections.observableArrayList();
+
 
     @FXML
     private TextField txtTitle;
@@ -104,7 +108,7 @@ public class BookServiceImpl implements BookService, Initializable {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bookmanager_db", "root", "");
 
             //Query
-            String sql = "select * from book";
+            String sql = "select * from book where status=1";
             statement = connection.createStatement();
 
             ResultSet resultSet = statement.executeQuery(sql);
@@ -242,18 +246,57 @@ public class BookServiceImpl implements BookService, Initializable {
     }
 
     @Override
-    public void deleteBook(Integer id) {
+    public void deleteDvd(Integer id) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bookmanager_db", "root", "");
 
             //Query
-            String sql = "delete from book  where id=?";
+            String sql = "delete from book where id=?";
 
             statement = connection.prepareCall(sql);
 
             statement.setInt(1, id);
+
+            statement.execute();
+
+
+        } catch (SQLException ex) {
+            Logger.getLogger(BookServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(BookServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(BookServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+
+                }
+            }
+        }
+    }
+
+    public void setStatus(Integer id) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bookmanager_db", "root", "");
+
+            //Query
+            String sql = "update book set status=0 where id=?";
+
+            statement = connection.prepareCall(sql);
+
+            statement.setInt(1, id);
+
+            statement.execute();
 
 
         } catch (SQLException ex) {
@@ -328,6 +371,47 @@ public class BookServiceImpl implements BookService, Initializable {
         return bookList;
     }
 
+    private int interest() {
+        int sumImportPrice = 0, sumExportPrice = 0;
+
+        Connection connection = null;
+        Statement statement = null;
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bookmanager_db", "root", "");
+
+            //Query
+            String sql = "select importPrice, exportPrice from book ";
+            statement = connection.createStatement();
+
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+                sumImportPrice += resultSet.getInt("importPrice");
+                sumExportPrice += resultSet.getInt("exportPrice");
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(BookServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(BookServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(BookServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+
+                }
+            }
+        }
+        return (sumExportPrice - sumImportPrice);
+    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -382,6 +466,17 @@ public class BookServiceImpl implements BookService, Initializable {
 
     public void updateBook(ActionEvent actionEvent) {
 
+        ObservableList<Book> selectedItem = tblBook.getSelectionModel().getSelectedItems();
+        txtTitle.setText(selectedItem.get(0).getTitle());
+        txtAuthor.setText(selectedItem.get(0).getAuthor());
+        txtPublisher.setText(selectedItem.get(0).getPublisher());
+        txtPublicYear.setText(String.valueOf(selectedItem.get(0).getPublicYear()));
+        txtImportPrice.setText(String.valueOf(selectedItem.get(0).getImportPrice()));
+        txtExportPrice.setText(String.valueOf(selectedItem.get(0).getExportPrice()));
+        txtNbrPage.setText(String.valueOf(selectedItem.get(0).getNumberOfPage()));
+        txtLength.setText(String.valueOf(selectedItem.get(0).getLength()));
+        txtWidth.setText(String.valueOf(selectedItem.get(0).getWidth()));
+
         showBook();
     }
 
@@ -409,14 +504,30 @@ public class BookServiceImpl implements BookService, Initializable {
     }
 
     public void deleteBook(ActionEvent actionEvent) {
-
+        ObservableList<Book> selectedItem = tblBook.getSelectionModel().getSelectedItems();
+        deleteDvd(selectedItem.get(0).getId());
         showBook();
     }
 
     public void sellBook(ActionEvent actionEvent) {
+        ObservableList<Book> selectedItem = tblBook.getSelectionModel().getSelectedItems();
+        setStatus(selectedItem.get(0).getId());
+        showBook();
     }
 
     public void interestMoney(ActionEvent actionEvent) {
+        txtInterest.setText(String.valueOf(interest()));
+    }
+
+    public void changeLayout(ActionEvent actionEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/Dvd.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 848, 481);
+
+        Stage window = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+
+        window.setTitle("DVD Management");
+        window.setScene(scene);
+        window.show();
     }
 }
 

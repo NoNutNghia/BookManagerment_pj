@@ -28,7 +28,7 @@ public class BookController {
     }
 
     public void delete(int id) {
-        bookService.deleteBook(id);
+        bookService.deleteDvd(id);
     }
 
     public List<Book> search(SearchBookRequest searchBookRequest) {

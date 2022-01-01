@@ -7,7 +7,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class DvdManagement extends Application {
+public class Main extends Application {
+
 
     public static void main(String[] args) {
         launch(args);
@@ -15,9 +16,10 @@ public class DvdManagement extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/Dvd.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/Book.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 848, 481);
-        primaryStage.setTitle("Book Store Management");
+        primaryStage.setTitle("Book Management");
+        primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

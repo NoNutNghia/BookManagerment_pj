@@ -27,10 +27,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class BookServiceImpl implements BookService, Initializable {
-    @FXML
-    private Button btnEdit;
-    @FXML
-    private Button btnDvd;
+
+    // Table View to show product information
     @FXML
     private TextField txtInterest;
     @FXML
@@ -58,53 +56,47 @@ public class BookServiceImpl implements BookService, Initializable {
     @FXML
     private TableColumn<Book, Integer> col_status;
 
-    ObservableList<Book> oblist = FXCollections.observableArrayList();
-
-
+    // Button and text field in file .fxml
     @FXML
     private TextField txtTitle;
-
     @FXML
     private TextField txtAuthor;
-
     @FXML
     private TextField txtPublisher;
-
     @FXML
     private TextField txtPublicYear;
-
     @FXML
     private TextField txtImportPrice;
-
     @FXML
     private TextField txtExportPrice;
-
     @FXML
     private TextField txtNbrPage;
-
     @FXML
     private TextField txtWidth;
-
     @FXML
     private TextField txtLength;
-
+    @FXML
+    private Button btnEdit;
+    @FXML
+    private Button btnDvd;
     @FXML
     private Button btnAdd;
-
     @FXML
     private Button btnUpdate;
-
     @FXML
     private Button btnReset;
-
     @FXML
     private Button btnSearch;
-
     @FXML
     private Button btnDelete;
 
+    // Get id for edit and update process
     private int id;
 
+    // The list only-read oblist to show information product on table view
+    ObservableList<Book> oblist = FXCollections.observableArrayList();
+
+    // Find all product that is available to sell
     @Override
     public ObservableList<Book> findAll() {
         ObservableList<Book> bookList = FXCollections.observableArrayList();
@@ -152,6 +144,7 @@ public class BookServiceImpl implements BookService, Initializable {
         return bookList;
     }
 
+    // Input a product and add information into database
     @Override
     public void insertBook(Book book) {
         Connection connection = null;
@@ -207,6 +200,7 @@ public class BookServiceImpl implements BookService, Initializable {
         }
     }
 
+    // Set information again product that user want to change to database
     @Override
     public void updateBook(Book book, int id) {
         Connection connection = null;
@@ -232,7 +226,6 @@ public class BookServiceImpl implements BookService, Initializable {
 
             statement.execute();
 
-
         } catch (SQLException ex) {
             Logger.getLogger(BookServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -254,6 +247,7 @@ public class BookServiceImpl implements BookService, Initializable {
         }
     }
 
+    // Delete a product that user want to do
     @Override
     public void deleteDvd(Integer id) {
         Connection connection = null;
@@ -270,7 +264,6 @@ public class BookServiceImpl implements BookService, Initializable {
 
             statement.execute();
 
-
         } catch (SQLException ex) {
             Logger.getLogger(BookServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -292,7 +285,8 @@ public class BookServiceImpl implements BookService, Initializable {
         }
     }
 
-    public void setStatus(Integer id) {
+    // After sell a product, status of that product set to false. It means the product is unavailable to sell
+     public void setStatus(Integer id) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
@@ -307,7 +301,6 @@ public class BookServiceImpl implements BookService, Initializable {
 
             statement.execute();
 
-
         } catch (SQLException ex) {
             Logger.getLogger(BookServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -329,6 +322,7 @@ public class BookServiceImpl implements BookService, Initializable {
         }
     }
 
+    // Return all product that have information the same with data user input on 3 text fields
     @Override
     public ObservableList<Book> searchBook(SearchBookRequest searchBookRequest) {
         ObservableList<Book> bookList = FXCollections.observableArrayList();
@@ -380,6 +374,7 @@ public class BookServiceImpl implements BookService, Initializable {
         return bookList;
     }
 
+    // Calculate and return how much money user get after sell amount of product
     private int interest() {
         int sumImportPrice = 0, sumExportPrice = 0;
 
@@ -421,12 +416,13 @@ public class BookServiceImpl implements BookService, Initializable {
         return (sumExportPrice - sumImportPrice);
     }
 
-
+    // Show all products can sell in table view
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         showBook();
     }
 
+    // Setup and show information to table view
     private void showBook() {
         col_id.setCellValueFactory(new PropertyValueFactory<>("id"));
         col_title.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -442,9 +438,9 @@ public class BookServiceImpl implements BookService, Initializable {
 
         oblist = findAll();
         tblBook.setItems(oblist);
-
     }
 
+    // Take all data user input on text field and add data into database, show all newest products
     public void insertBookImpl(ActionEvent actionEvent) {
         String title = txtTitle.getText();
         String author = txtAuthor.getText();
@@ -460,6 +456,7 @@ public class BookServiceImpl implements BookService, Initializable {
         showBook();
     }
 
+    // Set all field to blank field, or out action edit and update product
     public void resetField(ActionEvent actionEvent) {
         txtTitle.setText("");
         txtAuthor.setText("");
@@ -475,6 +472,7 @@ public class BookServiceImpl implements BookService, Initializable {
         btnEdit.setDisable(false);
     }
 
+    // Take all data where user click on table view, and fill out all field corresponding
     public void editBook(ActionEvent actionEvent) {
 
         ObservableList<Book> selectedItem = tblBook.getSelectionModel().getSelectedItems();
@@ -493,6 +491,8 @@ public class BookServiceImpl implements BookService, Initializable {
         btnEdit.setDisable(true);
     }
 
+    /* User fill out 3 fields title, author and public year, click search and all
+       product have the same data will show on the table view */
     public void searchBook(ActionEvent actionEvent) {
         String title = txtTitle.getText();
         String author = txtAuthor.getText();
@@ -516,17 +516,20 @@ public class BookServiceImpl implements BookService, Initializable {
         tblBook.setItems(oblist);
     }
 
+    // User click the product that want to delete, the product will be removed and show all newest product
     public void deleteBook(ActionEvent actionEvent) {
         ObservableList<Book> selectedItem = tblBook.getSelectionModel().getSelectedItems();
         deleteDvd(selectedItem.get(0).getId());
         showBook();
     }
 
+    /* User click the product that want to sell, the product will be set status to false,
+       create and write to file data of product, and show all newest product */
     public void sellBook(ActionEvent actionEvent) throws IOException {
         ObservableList<Book> selectedItem = tblBook.getSelectionModel().getSelectedItems();
         setStatus(selectedItem.get(0).getId());
         try {
-            File fileName = new File("D:\\cast\\Book\\castInfo-" + selectedItem.get(0).getId() +".txt");
+            File fileName = new File("D:\\bill\\Book\\billInfo-" + selectedItem.get(0).getId() +".txt");
             if (fileName.createNewFile()) {
                 LocalDateTime time = LocalDateTime.now();
                 FileWriter fileWriter = new FileWriter(fileName);
@@ -550,10 +553,13 @@ public class BookServiceImpl implements BookService, Initializable {
         showBook();
     }
 
+    // Click the button "Interest" and user will know how much money can get after sell some products
     public void interestMoney(ActionEvent actionEvent) {
         txtInterest.setText(String.valueOf(interest()));
     }
 
+    /* Click the biggest button and the scene will be changed,
+       the title of scene and text on button before user clicking means the frame user is using */
     public void changeLayout(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/Dvd.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 848, 481);
@@ -565,6 +571,8 @@ public class BookServiceImpl implements BookService, Initializable {
         window.show();
     }
 
+    /* Take all data from all field, click the button update and data of product user want will be changed in database,
+       table view will show all newest product  */
     public void updateBook(ActionEvent actionEvent) {
         String title = txtTitle.getText();
         String author = txtAuthor.getText();

@@ -1,6 +1,9 @@
 package service.impl;
 
+import models.Dvd;
+import service.DvdService;
 import controller.request.dvd.SearchDvdRequest;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,8 +18,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import models.Dvd;
-import service.DvdService;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -30,52 +31,41 @@ import java.util.logging.Logger;
 
 public class DvdServiceImpl implements DvdService, Initializable {
 
-    @FXML
-    private Button btnEdit;
+    // Button and text field in file .fxml
     @FXML
     private TextField txtInterest;
     @FXML
     private TextField txtTitle;
-
     @FXML
     private TextField txtAuthor;
-
     @FXML
     private TextField txtPublisher;
-
     @FXML
     private TextField txtPublicYear;
-
     @FXML
     private TextField txtImportPrice;
-
     @FXML
     private TextField txtExportPrice;
-
     @FXML
     private TextField txtSize;
-
     @FXML
     private TextField txtDuration;
-
     @FXML
     private Button btnAdd;
-
     @FXML
     private Button btnUpdate;
-
     @FXML
     private Button btnReset;
-
     @FXML
     private Button btnSearch;
-
     @FXML
     private Button btnDelete;
+    @FXML
+    private Button btnEdit;
 
+    // Table View to show product information
     @FXML
     private TableView<Dvd> tblDvd;
-
     @FXML
     private TableColumn<Dvd, String> col_id;
     @FXML
@@ -97,10 +87,13 @@ public class DvdServiceImpl implements DvdService, Initializable {
     @FXML
     private TableColumn<Dvd, Integer> col_status;
 
+    // Get id for edit and update process
     private int id;
 
+    // The list only-read oblist to show information product on table view
     ObservableList<Dvd> oblist = FXCollections.observableArrayList();
 
+    // Find all product that is available to sell
     @Override
     public ObservableList<Dvd> findAll() {
         ObservableList<Dvd> dvdList = FXCollections.observableArrayList();
@@ -108,7 +101,6 @@ public class DvdServiceImpl implements DvdService, Initializable {
         Connection connection = null;
         Statement statement = null;
         try {
-            //Lay tat ca dia
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bookmanager_db", "root", "");
 
             //Query
@@ -148,12 +140,12 @@ public class DvdServiceImpl implements DvdService, Initializable {
         return dvdList;
     }
 
+    // Input a product and add information into database
     @Override
     public void insertDvd(Dvd dvd) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            //Lay tat ca dia
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bookmanager_db", "root", "");
 
             //Query
@@ -202,12 +194,12 @@ public class DvdServiceImpl implements DvdService, Initializable {
         }
     }
 
+    // Set information again product that user want to change to database
     @Override
     public void updateDvd(Dvd dvd, int id) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            //Lay tat ca dia
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bookmanager_db", "root", "");
 
             //Query
@@ -226,7 +218,6 @@ public class DvdServiceImpl implements DvdService, Initializable {
             statement.setInt(9, id);
 
             statement.execute();
-
 
         } catch(SQLException ex) {
             Logger.getLogger(DvdServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -249,6 +240,7 @@ public class DvdServiceImpl implements DvdService, Initializable {
         }
     }
 
+    // After sell a product, status of that product set to false. It means the product is unavailable to sell
     public void setStatus(Integer id) {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -263,7 +255,6 @@ public class DvdServiceImpl implements DvdService, Initializable {
             statement.setInt(1, id);
 
             statement.execute();
-
 
         } catch (SQLException ex) {
             Logger.getLogger(BookServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -286,6 +277,7 @@ public class DvdServiceImpl implements DvdService, Initializable {
         }
     }
 
+    // Delete a product that user want to do
     @Override
     public void deleteDvd(Integer id) {
         Connection connection = null;
@@ -301,7 +293,6 @@ public class DvdServiceImpl implements DvdService, Initializable {
             statement.setInt(1, id);
 
             statement.execute();
-
 
         } catch(SQLException ex) {
             Logger.getLogger(DvdServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -324,6 +315,7 @@ public class DvdServiceImpl implements DvdService, Initializable {
         }
     }
 
+    // Calculate and return how much money user get after sell amount of product
     private int interest() {
         int sumImportPrice = 0, sumExportPrice = 0;
 
@@ -363,9 +355,9 @@ public class DvdServiceImpl implements DvdService, Initializable {
             }
         }
         return (sumExportPrice - sumImportPrice);
-
     }
 
+    // Return all product that have information the same with data user input on 3 text fields
     @Override
     public ObservableList<Dvd> searchDvd(SearchDvdRequest searchDvdRequest) {
         ObservableList<Dvd> dvdList = FXCollections.observableArrayList();
@@ -416,11 +408,13 @@ public class DvdServiceImpl implements DvdService, Initializable {
         return dvdList;
     }
 
+    // Show all products can sell in table view
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         showDvd();
     }
 
+    // Setup and show information to table view
     private void showDvd() {
         col_id.setCellValueFactory(new PropertyValueFactory<>("id"));
         col_title.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -437,6 +431,7 @@ public class DvdServiceImpl implements DvdService, Initializable {
         tblDvd.setItems(oblist);
     }
 
+    // Take all data user input on text field and add data into database, show all newest products
     public void insertDvd(ActionEvent actionEvent) {
         String title = txtTitle.getText();
         String author = txtAuthor.getText();
@@ -452,6 +447,8 @@ public class DvdServiceImpl implements DvdService, Initializable {
         showDvd();
     }
 
+    /* Take all data from all field, click the button update and data of product user want will be changed in database,
+       table view will show all newest product */
     public void updateDvd(ActionEvent actionEvent) {
         String title = txtTitle.getText();
         String author = txtAuthor.getText();
@@ -467,7 +464,7 @@ public class DvdServiceImpl implements DvdService, Initializable {
         showDvd();
     }
 
-
+    // Set all field to blank field, or out action edit and update product
     public void resetField(ActionEvent actionEvent) {
         txtTitle.setText("");
         txtAuthor.setText("");
@@ -482,6 +479,8 @@ public class DvdServiceImpl implements DvdService, Initializable {
         btnEdit.setDisable(false);
     }
 
+    /* User fill out 3 fields title, author and public year, click search and all
+       product have the same data will show on the table view */
     public void searchDvd(ActionEvent actionEvent) {
         String title = txtTitle.getText();
         String author = txtAuthor.getText();
@@ -505,17 +504,20 @@ public class DvdServiceImpl implements DvdService, Initializable {
 
     }
 
+    // User click the product that want to delete, the product will be removed and show all newest product
     public void deleteDvd(ActionEvent actionEvent) {
         ObservableList<Dvd> selectedItem = tblDvd.getSelectionModel().getSelectedItems();
         deleteDvd(selectedItem.get(0).getId());
         showDvd();
     }
 
+    /* User click the product that want to sell, the product will be set status to false,
+       create and write to file data of product, and show all newest product */
     public void sellDvd(ActionEvent actionEvent) throws IOException {
         ObservableList<Dvd> selectedItem = tblDvd.getSelectionModel().getSelectedItems();
         setStatus(selectedItem.get(0).getId());
         try {
-            File fileName = new File("D:\\cast\\Dvd\\castInfo-" + selectedItem.get(0).getId() +".txt");
+            File fileName = new File("D:\\bill\\Dvd\\billInfo-" + selectedItem.get(0).getId() +".txt");
             if (fileName.createNewFile()) {
                 LocalDateTime time = LocalDateTime.now();
                 FileWriter fileWriter = new FileWriter(fileName);
@@ -540,10 +542,13 @@ public class DvdServiceImpl implements DvdService, Initializable {
         showDvd();
     }
 
+    // Click the button "Interest" and user will know how much money can get after sell some products
     public void interestMoney(ActionEvent actionEvent) {
         txtInterest.setText(String.valueOf(interest()));
     }
 
+    /* Click the biggest button and the scene will be changed,
+       the title of scene and text on button before user clicking means the frame user is using */
     public void changeLayout(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/Book.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 848, 481);
@@ -555,6 +560,7 @@ public class DvdServiceImpl implements DvdService, Initializable {
         window.show();
     }
 
+    // Take all data where user click on table view, and fill out all field corresponding
     public void editDvd(ActionEvent actionEvent) {
         ObservableList<Dvd> selectedItem = tblDvd.getSelectionModel().getSelectedItems();
         txtTitle.setText(selectedItem.get(0).getTitle());

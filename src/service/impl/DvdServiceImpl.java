@@ -446,8 +446,6 @@ public class DvdServiceImpl implements DvdService, Initializable {
         insertDvd(dvd);
 
         showDvd();
-
-        alertStatus("Insert product").showAndWait();
     }
 
     /* Take all data from all field, click the button update and data of product user want will be changed in database,
@@ -513,6 +511,7 @@ public class DvdServiceImpl implements DvdService, Initializable {
         Optional<ButtonType> result = alertConfirm(selectedItem.get(0).getTitle()).showAndWait();
         if(result.get() == ButtonType.OK) {
             deleteDvd(selectedItem.get(0).getId());
+            alertStatus("Delete product").showAndWait();
         }
         showDvd();
     }
@@ -542,6 +541,7 @@ public class DvdServiceImpl implements DvdService, Initializable {
                     fileWriter.write("==================================================================\n");
                     fileWriter.write("Thank you and have a good day!!!");
                     fileWriter.close();
+                    alertStatus("Sell product");
                 } else {
                     errorAlert("File already exists.");
                 }
@@ -591,13 +591,13 @@ public class DvdServiceImpl implements DvdService, Initializable {
 
     public Alert alertStatus(String result) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setContentText(result + "successfully");
+        alert.setContentText(result + " successfully");
         return alert;
     }
 
     public Alert alertConfirm(String product) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setContentText("Do you want to delete product " + product + "?");
+        alert.setContentText("Do you want to delete product " + product + " ?");
         return alert;
     }
 

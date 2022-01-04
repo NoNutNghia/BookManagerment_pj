@@ -458,8 +458,6 @@ public class BookServiceImpl implements BookService, Initializable {
         Book book = new Book(title, author, publisher, publicYear, importPrice, exportPrice, nbrPage, width, length);
         insertBook(book);
 
-        alertStatus("Insert product").showAndWait();
-
         showBook();
     }
 
@@ -529,6 +527,7 @@ public class BookServiceImpl implements BookService, Initializable {
         Optional<ButtonType> result = alertConfirm(selectedItem.get(0).getTitle()).showAndWait();
         if(result.get() == ButtonType.OK) {
             deleteDvd(selectedItem.get(0).getId());
+            alertStatus("Delete product").showAndWait();
         }
         showBook();
     }
@@ -557,6 +556,7 @@ public class BookServiceImpl implements BookService, Initializable {
                     fileWriter.write("==================================================================\n");
                     fileWriter.write("Thank you and have a good day!!!");
                     fileWriter.close();
+                    alertStatus("Sell").showAndWait();
                 } else {
                     errorAlert("File already exists.");
                 }
@@ -607,13 +607,13 @@ public class BookServiceImpl implements BookService, Initializable {
 
     public Alert alertStatus(String result) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setContentText(result + "successfully");
+        alert.setContentText(result + " successfully");
         return alert;
     }
 
     public Alert alertConfirm(String product) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setContentText("Do you want to delete product " + product + "?");
+        alert.setContentText("Do you want to delete product " + product + " ?");
         return alert;
     }
 

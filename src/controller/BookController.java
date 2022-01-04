@@ -1,3 +1,6 @@
+
+
+// NGUYEN NGOC NGHIA
 package controller;
 
 import controller.request.book.SearchBookRequest;
@@ -14,7 +17,6 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    //Lay du lieu tu db
     public List<Book> findALl() throws SQLException {
         return bookService.findAll();
     }

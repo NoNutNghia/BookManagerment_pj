@@ -1,3 +1,6 @@
+
+
+// NGUYEN NGOC NGHIA
 package controller;
 
 import controller.request.dvd.SearchDvdRequest;
@@ -13,8 +16,6 @@ public class DvdController {
     public DvdController(DvdService dvdService) {
         this.dvdService = dvdService;
     }
-
-    //Lay du lieu tu db
 
     public List<Dvd> findAll() throws SQLException {
         return dvdService.findAll();

@@ -1,5 +1,9 @@
+
+
+// NGUYEN NGOC NGHIA
 package service.impl;
 
+import javafx.scene.control.*;
 import models.Dvd;
 import service.DvdService;
 import controller.request.dvd.SearchDvdRequest;
@@ -12,10 +16,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -445,6 +446,8 @@ public class DvdServiceImpl implements DvdService, Initializable {
         insertDvd(dvd);
 
         showDvd();
+
+        alertStatus("Insert product").showAndWait();
     }
 
     /* Take all data from all field, click the button update and data of product user want will be changed in database,
@@ -507,7 +510,10 @@ public class DvdServiceImpl implements DvdService, Initializable {
     // User click the product that want to delete, the product will be removed and show all newest product
     public void deleteDvd(ActionEvent actionEvent) {
         ObservableList<Dvd> selectedItem = tblDvd.getSelectionModel().getSelectedItems();
-        deleteDvd(selectedItem.get(0).getId());
+        Optional<ButtonType> result = alertConfirm(selectedItem.get(0).getTitle()).showAndWait();
+        if(result.get() == ButtonType.OK) {
+            deleteDvd(selectedItem.get(0).getId());
+        }
         showDvd();
     }
 
@@ -515,31 +521,37 @@ public class DvdServiceImpl implements DvdService, Initializable {
        create and write to file data of product, and show all newest product */
     public void sellDvd(ActionEvent actionEvent) throws IOException {
         ObservableList<Dvd> selectedItem = tblDvd.getSelectionModel().getSelectedItems();
-        setStatus(selectedItem.get(0).getId());
-        try {
-            File fileName = new File("D:\\bill\\Dvd\\billInfo-" + selectedItem.get(0).getId() +".txt");
-            if (fileName.createNewFile()) {
-                LocalDateTime time = LocalDateTime.now();
-                FileWriter fileWriter = new FileWriter(fileName);
-                fileWriter.write("Title: " + selectedItem.get(0).getTitle() + "\n");
-                fileWriter.write("Author: " + selectedItem.get(0).getAuthor() + "\n");
-                fileWriter.write("Publisher: " + selectedItem.get(0).getPublisher() + "\n");
-                fileWriter.write("Public Year: " + selectedItem.get(0).getPublicYear() + "\n");
-                fileWriter.write("Size: " + selectedItem.get(0).getSize() + " KB\n");
-                fileWriter.write("Duration: " + selectedItem.get(0).getDuration() + " (s)\n");
-                fileWriter.write("Price: " + selectedItem.get(0).getExportPrice() + "\n");
-                fileWriter.write("Time at: " + time + "\n");
-                fileWriter.write("==================================================================\n");
-                fileWriter.write("Thank you and have a good day!!!");
-                fileWriter.close();
-            } else {
-                System.out.println("File already exists.");
+        Optional<String> result = purchaser().showAndWait();
+        if (result.isPresent()) {
+            try {
+                File fileName = new File("D:\\bill\\Dvd\\billInfo-" + selectedItem.get(0).getId() + ".txt");
+                if (fileName.createNewFile()) {
+                    setStatus(selectedItem.get(0).getId());
+                    String purchaser = result.get();
+                    LocalDateTime time = LocalDateTime.now();
+                    FileWriter fileWriter = new FileWriter(fileName);
+                    fileWriter.write("Purchaser: " + purchaser + "\n");
+                    fileWriter.write("Title: " + selectedItem.get(0).getTitle() + "\n");
+                    fileWriter.write("Author: " + selectedItem.get(0).getAuthor() + "\n");
+                    fileWriter.write("Publisher: " + selectedItem.get(0).getPublisher() + "\n");
+                    fileWriter.write("Public Year: " + selectedItem.get(0).getPublicYear() + "\n");
+                    fileWriter.write("Size: " + selectedItem.get(0).getSize() + " KB\n");
+                    fileWriter.write("Duration: " + selectedItem.get(0).getDuration() + " (s)\n");
+                    fileWriter.write("Price: " + selectedItem.get(0).getExportPrice() + "\n");
+                    fileWriter.write("Time at: " + time + "\n");
+                    fileWriter.write("==================================================================\n");
+                    fileWriter.write("Thank you and have a good day!!!");
+                    fileWriter.close();
+                } else {
+                    errorAlert("File already exists.");
+                }
+
+            } catch (IOException e) {
+                errorAlert("An error occurred.");
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
+            showDvd();
         }
-        showDvd();
     }
 
     // Click the button "Interest" and user will know how much money can get after sell some products
@@ -576,4 +588,30 @@ public class DvdServiceImpl implements DvdService, Initializable {
         btnUpdate.setDisable(false);
         btnEdit.setDisable(true);
     }
+
+    public Alert alertStatus(String result) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setContentText(result + "successfully");
+        return alert;
+    }
+
+    public Alert alertConfirm(String product) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setContentText("Do you want to delete product " + product + "?");
+        return alert;
+    }
+
+    public TextInputDialog purchaser() {
+        TextInputDialog textInputDialog = new TextInputDialog();
+        textInputDialog.setHeaderText("Purchaser info");
+        textInputDialog.setContentText("Enter name of purchaser: ");
+        return textInputDialog;
+    }
+
+    public Alert errorAlert(String error) {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText(error);
+        return errorAlert;
+    }
+
 }

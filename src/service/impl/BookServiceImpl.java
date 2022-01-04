@@ -1,3 +1,6 @@
+
+
+// NGUYEN NGOC NGHIA
 package service.impl;
 
 import models.Book;
@@ -22,6 +25,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -453,6 +457,9 @@ public class BookServiceImpl implements BookService, Initializable {
         Integer length = Integer.valueOf(txtLength.getText());
         Book book = new Book(title, author, publisher, publicYear, importPrice, exportPrice, nbrPage, width, length);
         insertBook(book);
+
+        alertStatus("Insert product").showAndWait();
+
         showBook();
     }
 
@@ -519,7 +526,10 @@ public class BookServiceImpl implements BookService, Initializable {
     // User click the product that want to delete, the product will be removed and show all newest product
     public void deleteBook(ActionEvent actionEvent) {
         ObservableList<Book> selectedItem = tblBook.getSelectionModel().getSelectedItems();
-        deleteDvd(selectedItem.get(0).getId());
+        Optional<ButtonType> result = alertConfirm(selectedItem.get(0).getTitle()).showAndWait();
+        if(result.get() == ButtonType.OK) {
+            deleteDvd(selectedItem.get(0).getId());
+        }
         showBook();
     }
 
@@ -527,28 +537,33 @@ public class BookServiceImpl implements BookService, Initializable {
        create and write to file data of product, and show all newest product */
     public void sellBook(ActionEvent actionEvent) throws IOException {
         ObservableList<Book> selectedItem = tblBook.getSelectionModel().getSelectedItems();
-        setStatus(selectedItem.get(0).getId());
-        try {
-            File fileName = new File("D:\\bill\\Book\\billInfo-" + selectedItem.get(0).getId() +".txt");
-            if (fileName.createNewFile()) {
-                LocalDateTime time = LocalDateTime.now();
-                FileWriter fileWriter = new FileWriter(fileName);
-                fileWriter.write("Title: " + selectedItem.get(0).getTitle() + "\n");
-                fileWriter.write("Author: " + selectedItem.get(0).getAuthor() + "\n");
-                fileWriter.write("Publisher: " + selectedItem.get(0).getPublisher() + "\n");
-                fileWriter.write("Public Year: " + selectedItem.get(0).getPublicYear() + "\n");
-                fileWriter.write("Number of Page: " + selectedItem.get(0).getNumberOfPage() + "\n");
-                fileWriter.write("Price: " + selectedItem.get(0).getExportPrice() + "\n");
-                fileWriter.write("Time at: " + time + "\n");
-                fileWriter.write("==================================================================\n");
-                fileWriter.write("Thank you and have a good day!!!");
-                fileWriter.close();
-            } else {
-                System.out.println("File already exists.");
+        Optional<String> result = purchaser().showAndWait();
+        if(result.isPresent()) {
+            try {
+                File fileName = new File("D:\\bill\\Book\\billInfo-" + selectedItem.get(0).getId() +".txt");
+                if (fileName.createNewFile()) {
+                    setStatus(selectedItem.get(0).getId());
+                    String purchaser = result.get();
+                    LocalDateTime time = LocalDateTime.now();
+                    FileWriter fileWriter = new FileWriter(fileName);
+                    fileWriter.write("Purchaser: " + purchaser + "\n");
+                    fileWriter.write("Title: " + selectedItem.get(0).getTitle() + "\n");
+                    fileWriter.write("Author: " + selectedItem.get(0).getAuthor() + "\n");
+                    fileWriter.write("Publisher: " + selectedItem.get(0).getPublisher() + "\n");
+                    fileWriter.write("Public Year: " + selectedItem.get(0).getPublicYear() + "\n");
+                    fileWriter.write("Number of Page: " + selectedItem.get(0).getNumberOfPage() + "\n");
+                    fileWriter.write("Price: " + selectedItem.get(0).getExportPrice() + "\n");
+                    fileWriter.write("Time at: " + time + "\n");
+                    fileWriter.write("==================================================================\n");
+                    fileWriter.write("Thank you and have a good day!!!");
+                    fileWriter.close();
+                } else {
+                    errorAlert("File already exists.");
+                }
+            } catch (IOException e) {
+                errorAlert("An error occurred.");
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
         }
         showBook();
     }
@@ -588,6 +603,31 @@ public class BookServiceImpl implements BookService, Initializable {
         updateBook(book, id);
         resetField(actionEvent);
         showBook();
+    }
+
+    public Alert alertStatus(String result) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setContentText(result + "successfully");
+        return alert;
+    }
+
+    public Alert alertConfirm(String product) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setContentText("Do you want to delete product " + product + "?");
+        return alert;
+    }
+
+    public TextInputDialog purchaser() {
+        TextInputDialog textInputDialog = new TextInputDialog();
+        textInputDialog.setHeaderText("Purchaser info");
+        textInputDialog.setContentText("Enter name of purchaser: ");
+        return textInputDialog;
+    }
+
+    public Alert errorAlert(String error) {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText(error);
+        return errorAlert;
     }
 }
 

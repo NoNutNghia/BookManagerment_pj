@@ -1,5 +1,7 @@
-package models;
 
+
+// VU DUC DAI
+package models;
 
 public class Product {
     private int id;
